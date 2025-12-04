@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  3 DEC 2025 05:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  3 DEC 2025 23:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -349,7 +349,7 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
  (./Secciones/introduccion.aux) (./Secciones/marcoteorico.aux)
-(./Secciones/objetivos.aux))
+(./Secciones/objetivos.aux) (./Secciones/desarrollo.aux))
 \openout1 = `portada.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 168.
@@ -407,7 +407,7 @@ Package hyperref Info: Link coloring OFF on input line 168.
 \@outlinefile=\write3
 \openout3 = `portada.out'.
 
-<img/logoUAM.png, id=64, 456.7464pt x 134.4222pt>
+<img/logoUAM.png, id=76, 456.7464pt x 134.4222pt>
 
 
 [0
@@ -529,10 +529,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-)
 
-LaTeX Info: Redefining \. on input line 246.
-LaTeX Info: Redefining \% on input line 246.
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 44.
+LaTeX Info: Redefining \% on input line 44.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -543,12 +548,24 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [6
 
 
-]
+])
+
+LaTeX Info: Redefining \. on input line 246.
+LaTeX Info: Redefining \% on input line 246.
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[7{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+}]
 :<-
 Cap\'{\i }tulo 4.
 
 
-[7
+[8
 
 
 
@@ -567,7 +584,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[8
+[9
 
 
 ]
@@ -575,7 +592,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 Cap\'{\i }tulo 5.
 
 
-[9
+[10
 
 
 
@@ -583,11 +600,11 @@ Cap\'{\i }tulo 5.
 Cap\'{\i }tulo 6.
 
 
-[10
+[11
 
 ]
 
-[11
+[12
 
 ] (./portada.aux
 LaTeX Info: Redefining \. on input line 11.
@@ -603,35 +620,31 @@ L3 programming layer <2025-01-18>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-Package rerunfilecheck Warning: File `portada.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `portada.out':
-(rerunfilecheck)             Before: 6ADC0A499D74EC851F6CB0B641015A41;2711
-(rerunfilecheck)             After:  966F762AE8789463BE66D7DAB6CE0561;2972.
+Package rerunfilecheck Info: File `portada.out' has not changed.
+(rerunfilecheck)             Checksum: B164B8E2DD0243BA3B027C013224B1DB;3250.
  ) 
 Here is how much of TeX's memory you used:
- 14139 strings out of 473190
- 229882 string characters out of 5715801
- 638693 words of memory out of 5000000
- 37177 multiletter control sequences out of 15000+600000
- 564517 words of font info for 55 fonts, out of 8000000 for 9000
+ 14158 strings out of 473190
+ 230202 string characters out of 5715801
+ 643140 words of memory out of 5000000
+ 37189 multiletter control sequences out of 15000+600000
+ 565165 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,79p,1024b,495s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,79p,1024b,497s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></
 usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></
 usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
 r/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/
-local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/l
-ocal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on portada.pdf (15 pages, 115305 bytes).
+local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
+ocal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/lo
+cal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/loc
+al/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
+Output written on portada.pdf (16 pages, 143123 bytes).
 PDF statistics:
- 209 PDF objects out of 1000 (max. 8388607)
- 172 compressed objects within 2 object streams
- 39 named destinations out of 1000 (max. 500000)
- 126 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 238 PDF objects out of 1000 (max. 8388607)
+ 196 compressed objects within 2 object streams
+ 42 named destinations out of 1000 (max. 500000)
+ 150 words of extra memory for PDF output out of 10000 (max. 10000000)
 
