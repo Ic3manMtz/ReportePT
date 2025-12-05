@@ -13,25 +13,22 @@ El proceso se dividió en las siguientes etapas: \\
 {\Large\bfseries 1. Caracterización inicial}
 \begin{itemize}
 	\item Exploración del conjunto de datos, identificación de columnas y filas irrelevantes.
-	\item Conteo de registros y dimensiones del dataset.
+	\item Conteo de registros y dimensiones de la base de datos.
 	\item Inspección de valores únicos y estructura general.
 \end{itemize}
 
 \vspace{0.5cm}
-{\Large\bfseries 2. Depuración de columnas}
+{\Large\bfseries 2. Limpieza de datos}
 \begin{itemize}
 	\item Selección de campos relevantes para el análisis.
 	\item Eliminación de columnas redundantes o sin valor analítico.
 	\item Conservación de columnas clave: identificador, timestamp, coordenadas, precisión GPS.
-\end{itemize}
-
-\vspace{0.5cm}
-{\Large\bfseries 3. Depuración de filas}
-\begin{itemize}
-	\item Eliminación de registros duplicados basados en identificador, timestamp y coordenadas.
+    \item Eliminación de registros duplicados basados en identificador, timestamp y coordenadas.
 	\item Filtrado de registros con baja precisión GPS mayor a 20 metros.
 	\item Análisis de frecuencia de aparición de identificadores únicos.
 \end{itemize}
+
+Escribir tres pasos, uno para cada elemento y clasificar los pasos ya escritos en cada uno de los elementos que ayudaron
 
 \vspace{0.5cm}
 {\Large\bfseries 4. Análisis descriptivo}
