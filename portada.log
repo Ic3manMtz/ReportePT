@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  3 DEC 2025 23:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  5 DEC 2025 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -348,8 +348,7 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 (./portada.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
- (./Secciones/introduccion.aux) (./Secciones/marcoteorico.aux)
-(./Secciones/objetivos.aux) (./Secciones/desarrollo.aux))
+)
 \openout1 = `portada.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 168.
@@ -407,7 +406,7 @@ Package hyperref Info: Link coloring OFF on input line 168.
 \@outlinefile=\write3
 \openout3 = `portada.out'.
 
-<img/logoUAM.png, id=76, 456.7464pt x 134.4222pt>
+<img/logoUAM.png, id=92, 456.7464pt x 134.4222pt>
 
 
 [0
@@ -461,19 +460,20 @@ LaTeX Info: Redefining \% on input line 1.
 
 ]
 Cap\'{\i }tulo 1.
-
+Package srcltx Info: Expanded filename `Secciones/introduccion' to `Secciones/i
+ntroduccion.tex' on input line 240.
+:<+ Secciones/introduccion.tex
+(./Secciones/introduccion.tex
 
 [1
 
 
-]
-:<+ Secciones/introduccion.tex
-\openout2 = `Secciones/introduccion.aux'.
+])
+:<-
 
-(./Secciones/introduccion.tex)
 
-LaTeX Info: Redefining \. on input line 240.
-LaTeX Info: Redefining \% on input line 240.
+LaTeX Info: Redefining \. on input line 242.
+LaTeX Info: Redefining \% on input line 242.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -481,26 +481,21 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[2
-
-
-]
-:<-
+[2]
 Cap\'{\i }tulo 2.
-
+Package srcltx Info: Expanded filename `Secciones/marcoteorico.tex' to `Seccion
+es/marcoteorico.tex' on input line 243.
+:<+ Secciones/marcoteorico.tex
+(./Secciones/marcoteorico.tex
 
 [3
 
+])
+:<-
 
 
-]
-:<+ Secciones/marcoteorico.tex.tex
-\openout2 = `Secciones/marcoteorico.aux'.
-
-(./Secciones/marcoteorico.tex)
-
-LaTeX Info: Redefining \. on input line 243.
-LaTeX Info: Redefining \% on input line 243.
+LaTeX Info: Redefining \. on input line 245.
+LaTeX Info: Redefining \% on input line 245.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -508,22 +503,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[4
-
-
-]
-:<-
+[4]
 Cap\'{\i }tulo 3.
-
-
-[5
-
-
-
-]
-:<+ Secciones/objetivos.tex.tex
-\openout2 = `Secciones/objetivos.aux'.
-
+Package srcltx Info: Expanded filename `Secciones/objetivos.tex' to `Secciones/
+objetivos.tex' on input line 246.
+:<+ Secciones/objetivos.tex
 (./Secciones/objetivos.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
@@ -536,22 +520,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 11--12
 
 
 
-LaTeX Info: Redefining \. on input line 44.
-LaTeX Info: Redefining \% on input line 44.
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[6
-
+[5
 
 ])
+:<-
 
-LaTeX Info: Redefining \. on input line 246.
-LaTeX Info: Redefining \% on input line 246.
+
+LaTeX Info: Redefining \. on input line 248.
+LaTeX Info: Redefining \% on input line 248.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -559,24 +535,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[7{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+[6{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 }]
-:<-
 Cap\'{\i }tulo 4.
+Package srcltx Info: Expanded filename `Secciones/desarrollo.tex' to `Secciones
+/desarrollo.tex' on input line 249.
+:<+ Secciones/desarrollo.tex
+(./Secciones/desarrollo.tex
+
+[7
+
+])
+:<-
 
 
-[8
-
-
-
-]
-:<+ Secciones/desarrollo.tex.tex
-\openout2 = `Secciones/desarrollo.aux'.
-
-(./Secciones/desarrollo.tex)
-
-LaTeX Info: Redefining \. on input line 249.
-LaTeX Info: Redefining \% on input line 249.
+LaTeX Info: Redefining \. on input line 251.
+LaTeX Info: Redefining \% on input line 251.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -584,34 +558,26 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[9
-
-
-]
-:<-
+[8]
 Cap\'{\i }tulo 5.
 
 
-[10
-
-
+[9
 
 ]
 Cap\'{\i }tulo 6.
 
 
-[11
+[10
 
 ]
 
-[12
+[11
 
 ] (./portada.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
- (./Secciones/introduccion.aux)
-(./Secciones/marcoteorico.aux) (./Secciones/objetivos.aux)
-(./Secciones/desarrollo.aux))
+)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -621,16 +587,16 @@ L3 programming layer <2025-01-18>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `portada.out' has not changed.
-(rerunfilecheck)             Checksum: B164B8E2DD0243BA3B027C013224B1DB;3250.
+(rerunfilecheck)             Checksum: AB06354571A17C1BDA34BB7100481ACA;4046.
  ) 
 Here is how much of TeX's memory you used:
- 14158 strings out of 473190
- 230202 string characters out of 5715801
- 643140 words of memory out of 5000000
- 37189 multiletter control sequences out of 15000+600000
+ 14091 strings out of 473190
+ 227483 string characters out of 5715801
+ 641360 words of memory out of 5000000
+ 37135 multiletter control sequences out of 15000+600000
  565165 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,79p,1024b,497s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,79p,1024b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></
@@ -641,10 +607,10 @@ local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
 ocal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/lo
 cal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/loc
 al/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on portada.pdf (16 pages, 143123 bytes).
+Output written on portada.pdf (15 pages, 146409 bytes).
 PDF statistics:
- 238 PDF objects out of 1000 (max. 8388607)
- 196 compressed objects within 2 object streams
- 42 named destinations out of 1000 (max. 500000)
- 150 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 256 PDF objects out of 1000 (max. 8388607)
+ 214 compressed objects within 3 object streams
+ 45 named destinations out of 1000 (max. 500000)
+ 182 words of extra memory for PDF output out of 10000 (max. 10000000)
 

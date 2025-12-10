@@ -1,60 +1,47 @@
 \section{Caracterización inicial}
 \begin{itemize}
 	\item Exploración del conjunto de datos, identificación de columnas y filas irrelevantes.
-	\item Conteo de registros y dimensiones del dataset.
+	\item Conteo de registros y dimensiones de la base de datos.
 	\item Inspección de valores únicos y estructura general.
 \end{itemize}
 
-
-\section{Depuración de columnas}
+\section{Limpieza de datos}
 \begin{itemize}
 	\item Selección de campos relevantes para el análisis.
 	\item Eliminación de columnas redundantes o sin valor analítico.
-	\item Conservación de columnas clave: identificador, timestamp, coordenadas, precisión GPS.
-\end{itemize}
-
-\section{Depuración de filas}
-\begin{itemize}
-	\item Eliminación de registros duplicados basados en identificador, timestamp y coordenadas.
+	\item Conservación de columnas clave: \textit{identificador}, \textit{timestamp}, \textit{coordenadas}, \textit{precisión GPS}.
+	\item Eliminación de registros duplicados basados en \textit{identificador}, \textit{timestamp} y \textit{coordenadas}.
 	\item Filtrado de registros con baja precisión GPS mayor a 20 metros.
 	\item Análisis de frecuencia de aparición de identificadores únicos.
+	\item Desarrollo de algoritmo de puntuación compuesta basado en métricas 
+	\item Clasificación de trayectorias en categorías cualitativas.
 \end{itemize}
 
-\section{Análisis descriptivo}
+\section{Determinación de puntos de recorrido}
 \begin{itemize}
 	\item Distribución de individuos por día mediante histogramas temporales.
 	\item Cálculo de frecuencia de aparición y persistencia temporal.
 	\item Identificación de individuos con registros en múltiples días.
-\end{itemize}
-
-\section{Filtrado por velocidades peatonales}
-\begin{itemize}
-	 \item Cálculo de velocidades entre puntos consecutivos.
-	 \item Creación de histograma de distribución de velocidades.
-	 \item Aplicación de filtro peatonal utilizando parámetros estadísticos:
-	 \begin{itemize}
-	 	\item Media de velocidad peatonal: 1.34 m/s
-	 	\item Desviación estándar: 0.37 m/s
-	 	\item Rango aceptable: 0.6-2.08 m/s (media \(\pm\) desviaciones estándar)
-	 \end{itemize}
-	 \item Segmentación de trayectorias para eliminar puntos fuera del rango peatonal
-\end{itemize}
-
-\section{Mapa geográfico de trayectorias}
-\begin{itemize}
+	\item Cálculo de velocidades entre puntos consecutivos.
+	\item Creación de histograma de distribución de velocidades.
+	\item Aplicación de filtro peatonal utilizando parámetros estadísticos:
+	\begin{itemize}
+		\item Media de velocidad peatonal: 1.34 m/s
+		\item Desviación estándar: 0.37 m/s
+		\item Rango aceptable: 0.6-2.08 m/s (media \(\pm\) desviaciones estándar)
+	\end{itemize}
+	\item Segmentación de trayectorias para eliminar puntos fuera del rango peatonal
 	\item Mapa de distribución de puntos de recorrido por ciudad.
 	\item Visualización de trayectorias individuales completas.
-	\item Implementación de algoritmo de clustering sobre puntos de velocidad peatonal.
+	\item Implementación de algoritmo de \textit{clustering} sobre puntos de velocidad peatonal.
 \end{itemize}
 
-\section{Modelado de parámetros de movilidad}
+\section{Determinación de tiempos de pausa}
 \begin{itemize}
-	\item Cálculo de longitud de vuelo entre puntos consecutivos.
 	\item Cálculo de tiempos de pausa.
 \end{itemize}
 
-\section{Evaluación de calidad}
+\section{Determinación de longitudes de vuelo}
 \begin{itemize}
-	\item Desarrollo de algoritmo de puntuación compuesta basado en métricas 
-	\item Clasificación de trayectorias en categorías cualitativas.
+	\item Cálculo de longitud de vuelo entre puntos consecutivos.
 \end{itemize}
