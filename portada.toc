@@ -1,5 +1,5 @@
 \babel@toc {spanish}{}\relax 
-\contentsline {chapter}{Lista de Códigos}{\es@scroman {iii}}{chapter*.3}%
+\contentsline {chapter}{Lista de Códigos}{\es@scroman {v}}{chapter*.3}%
 \contentsline {chapter}{\numberline {1}Introducción del Proyecto}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Importancia de los modelos de movilidad para la evaluación de protocolos para redes móviles}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Proceso de diseño de un modelo de movilidad}{1}{section.1.2}%
@@ -15,9 +15,134 @@
 \contentsline {section}{\numberline {3.2}Metodología}{5}{section.3.2}%
 \contentsline {chapter}{\numberline {4}Desarrollo}{7}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Caracterización inicial}{7}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Limpieza de datos}{7}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Determinación de puntos de recorrido}{7}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Determinación de tiempos de pausa}{8}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Determinación de longitudes de vuelo}{8}{section.4.5}%
-\contentsline {chapter}{\numberline {5}Resultados}{9}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo futuro}{10}{chapter.6}%
+\contentsline {subsection}{\numberline {4.1.1}Exploración del conjunto de datos}{7}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Conteo de registros y dimensiones de la base de datos}{8}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Limpieza de datos}{8}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Selección de campos relevantes para el análisis}{8}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Eliminación de columnas redundantes o sin valor analítico}{9}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Filtrado de registros con baja precisión GPS}{9}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Análisis de frecuencia de aparición de identificadores únicos}{10}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Desarrollo de algoritmo de puntuación compuesta basado en métricas}{13}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Clasificación de trayectorias en categorías cualitativas}{15}{subsection.4.2.6}%
+\contentsline {section}{\numberline {4.3}Determinación de puntos de recorrido}{17}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Distribución temporal y frecuencia}{17}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Cálculo de velocidades}{19}{subsection.4.3.2}%
+\contentsline {paragraph}{Speed\_histogram.py: Análisis poblacional}{20}{paragraph*.14}%
+\contentsline {paragraph}{Speed\_vector.py: Análisis individual detallado}{21}{paragraph*.16}%
+\contentsline {subsection}{\numberline {4.3.3}Aplicación de filtro peatonal}{23}{subsection.4.3.3}%
+\contentsline {subsubsection}{Parámetros biomecánicos del filtro}{23}{subsubsection*.17}%
+\contentsline {subsection}{\numberline {4.3.4}Visualización geográfica}{26}{subsection.4.3.4}%
+\contentsline {subsubsection}{Show\_coordinates.py: Visualización individual interactiva}{27}{subsubsection*.19}%
+\contentsline {subsubsection}{City\_distribution\_map.py: Visualización agregada multi-usuario}{27}{subsubsection*.20}%
+\contentsline {subsubsection}{Graph.py: Visualizaciones estáticas multi-propósito}{28}{subsubsection*.21}%
+\contentsline {subsection}{\numberline {4.3.5}Implementación de algoritmo de \textit {clustering}}{30}{subsection.4.3.5}%
+\contentsline {subsubsection}{Preparación de datos}{31}{subsubsection*.23}%
+\contentsline {subsubsection}{Análisis exploratorio preliminar}{31}{subsubsection*.25}%
+\contentsline {subsubsection}{Determinación del número óptimo de clusters}{32}{subsubsection*.26}%
+\contentsline {paragraph}{Método del codo (Elbow Method)}{32}{paragraph*.27}%
+\contentsline {paragraph}{Método del coeficiente de Silhouette}{32}{paragraph*.28}%
+\contentsline {subsubsection}{Ejecución del algoritmo K-Means}{32}{subsubsection*.29}%
+\contentsline {subsubsection}{Análisis e interpretación de clusters}{33}{subsubsection*.30}%
+\contentsline {section}{\numberline {4.4}Determinación de tiempos de pausa}{36}{section.4.4}%
+\contentsline {subsubsection}{Preparación de datos y segmentación temporal}{36}{subsubsection*.33}%
+\contentsline {subsubsection}{Detección de movimiento y clasificación de puntos}{36}{subsubsection*.34}%
+\contentsline {subsubsection}{Cálculo de métricas de pausa}{37}{subsubsection*.36}%
+\contentsline {paragraph}{Filtrado de calidad}{37}{paragraph*.38}%
+\contentsline {subsubsection}{Análisis estadístico exhaustivo}{37}{subsubsection*.39}%
+\contentsline {paragraph}{Estadísticas globales}{38}{paragraph*.40}%
+\contentsline {paragraph}{Patrones temporales}{38}{paragraph*.41}%
+\contentsline {paragraph}{Relaciones exploratorias}{38}{paragraph*.42}%
+\contentsline {subsubsection}{Visualización comprehensiva}{38}{subsubsection*.43}%
+\contentsline {paragraph}{Figura 1: Análisis de duración de pausas}{38}{paragraph*.44}%
+\contentsline {paragraph}{Figura 2: Análisis temporal y contextual}{39}{paragraph*.45}%
+\contentsline {subsubsection}{Salida de resultados}{39}{subsubsection*.46}%
+\contentsline {paragraph}{Distribución multimodal de duraciones}{40}{paragraph*.48}%
+\contentsline {paragraph}{Patrones temporales esperados}{40}{paragraph*.49}%
+\contentsline {paragraph}{Características de usuarios}{40}{paragraph*.50}%
+\contentsline {subsubsection}{Implicaciones para el modelado de movilidad}{40}{subsubsection*.51}%
+\contentsline {section}{\numberline {4.5}Determinación de longitudes de vuelo}{41}{section.4.5}%
+\contentsline {subsubsection}{Cálculo de longitudes de trayectoria}{41}{subsubsection*.52}%
+\contentsline {subsubsection}{Análisis de distribución básico}{41}{subsubsection*.53}%
+\contentsline {paragraph}{Interpretación del gráfico Q-Q}{42}{paragraph*.55}%
+\contentsline {subsubsection}{Ajuste de distribuciones teóricas}{42}{subsubsection*.56}%
+\contentsline {paragraph}{Métodos de ajuste y evaluación}{42}{paragraph*.58}%
+\contentsline {paragraph}{Figura 1: Comparación de top distribuciones}{43}{paragraph*.59}%
+\contentsline {paragraph}{Figura 2: Análisis individual por distribución}{43}{paragraph*.60}%
+\contentsline {paragraph}{Forma de la distribución}{45}{paragraph*.62}%
+\contentsline {chapter}{\numberline {5}Resultados}{47}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Resultados de Clasificación de Calidad de Trayectorias}{47}{section.5.1}%
+\contentsline {paragraph}{Análisis de la distribución}{47}{paragraph*.65}%
+\contentsline {section}{\numberline {5.2}Resultados de Extracción de Trayectorias Peatonales}{48}{section.5.2}%
+\contentsline {paragraph}{Análisis de reducción por filtrado}{48}{paragraph*.67}%
+\contentsline {section}{\numberline {5.3}Resultados del Análisis de Clustering (K-Means)}{48}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Configuración y distribución general}{48}{subsection.5.3.1}%
+\contentsline {paragraph}{Calidad del clustering}{48}{paragraph*.69}%
+\contentsline {subsection}{\numberline {5.3.2}Caracterización detallada de clusters}{49}{subsection.5.3.2}%
+\contentsline {paragraph}{Perfiles comportamentales}{49}{paragraph*.71}%
+\contentsline {subsection}{\numberline {5.3.3}Análisis de correlaciones entre características}{50}{subsection.5.3.3}%
+\contentsline {paragraph}{Implicación}{50}{paragraph*.73}%
+\contentsline {subsection}{\numberline {5.3.4}Distribuciones de características clave}{51}{subsection.5.3.4}%
+\contentsline {section}{\numberline {5.4}Resultados del Análisis de Longitudes de Vuelo}{51}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Estadísticas descriptivas básicas}{51}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Métricas de forma de la distribución}{52}{subsection.5.4.2}%
+\contentsline {paragraph}{Interpretación de las métricas de forma}{52}{paragraph*.76}%
+\contentsline {subsection}{\numberline {5.4.3}Distribución inflada en cero}{52}{subsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.4.4}Ajuste de distribuciones teóricas}{52}{subsection.5.4.4}%
+\contentsline {paragraph}{Conclusiones del ajuste}{52}{paragraph*.79}%
+\contentsline {paragraph}{Implicación para modelado}{52}{paragraph*.80}%
+\contentsline {subsection}{\numberline {5.4.5}Análisis de outliers extremos}{53}{subsection.5.4.5}%
+\contentsline {paragraph}{Outlier máximo}{53}{paragraph*.81}%
+\contentsline {paragraph}{Recomendaciones para modelado futuro}{53}{paragraph*.82}%
+\contentsline {section}{\numberline {5.5}Resultados del Análisis de Tiempos de Pausa}{54}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Cobertura y estadísticas generales}{54}{subsection.5.5.1}%
+\contentsline {paragraph}{Observación crítica}{54}{paragraph*.84}%
+\contentsline {subsection}{\numberline {5.5.2}Distribución de duraciones de pausa}{55}{subsection.5.5.2}%
+\contentsline {paragraph}{Análisis de la dispersión}{55}{paragraph*.86}%
+\contentsline {subsection}{\numberline {5.5.3}Segmentación por duración}{55}{subsection.5.5.3}%
+\contentsline {paragraph}{Patrón bimodal identificado}{55}{paragraph*.88}%
+\contentsline {paragraph}{Interpretación comportamental}{55}{paragraph*.89}%
+\contentsline {paragraph}{Implicación fundamental}{56}{paragraph*.90}%
+\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo futuro}{57}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusiones Generales}{57}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Conclusiones por Objetivo}{57}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Caracterización de la base de datos}{57}{subsection.6.2.1}%
+\contentsline {paragraph}{Calidad GPS:}{57}{paragraph*.91}%
+\contentsline {paragraph}{Distribución de identificadores:}{58}{paragraph*.92}%
+\contentsline {paragraph}{Cobertura temporal:}{58}{paragraph*.93}%
+\contentsline {paragraph}{Implicación principal:}{58}{paragraph*.94}%
+\contentsline {subsection}{\numberline {6.2.2}Algoritmo de clasificación de calidad}{58}{subsection.6.2.2}%
+\contentsline {paragraph}{Resultados del algoritmo:}{58}{paragraph*.95}%
+\contentsline {paragraph}{Validación del algoritmo:}{58}{paragraph*.96}%
+\contentsline {paragraph}{Fortalezas del algoritmo:}{59}{paragraph*.97}%
+\contentsline {paragraph}{Limitaciones identificadas:}{59}{paragraph*.98}%
+\contentsline {subsection}{\numberline {6.2.3}Identificación de trayectorias peatonales}{59}{subsection.6.2.3}%
+\contentsline {paragraph}{Efectividad del filtrado:}{59}{paragraph*.99}%
+\contentsline {paragraph}{Segmentación de trayectorias:}{59}{paragraph*.100}%
+\contentsline {paragraph}{Cobertura geográfica:}{60}{paragraph*.101}%
+\contentsline {paragraph}{Desafío principal:}{60}{paragraph*.102}%
+\contentsline {subsection}{\numberline {6.2.4}Aplicación de inteligencia artificial: Clustering K-Means}{60}{subsection.6.2.4}%
+\contentsline {paragraph}{Hallazgos principales:}{60}{paragraph*.103}%
+\contentsline {paragraph}{Validación cruzada:}{61}{paragraph*.104}%
+\contentsline {paragraph}{Implicación para el modelado:}{61}{paragraph*.105}%
+\contentsline {subsection}{\numberline {6.2.5}Caracterización de elementos del modelo de movilidad}{61}{subsection.6.2.5}%
+\contentsline {paragraph}{Puntos de recorrido:}{61}{paragraph*.106}%
+\contentsline {paragraph}{Tiempos de pausa:}{61}{paragraph*.107}%
+\contentsline {paragraph}{Longitudes de vuelo:}{62}{paragraph*.108}%
+\contentsline {section}{\numberline {6.3}Limitaciones del Estudio}{63}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Limitaciones de los datos}{63}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Limitaciones metodológicas}{64}{subsection.6.3.2}%
+\contentsline {subsection}{\numberline {6.3.3}Limitaciones computacionales}{65}{subsection.6.3.3}%
+\contentsline {section}{\numberline {6.4}Trabajo Futuro}{65}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Mejoras inmediatas al pipeline actual}{65}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Extensiones metodológicas}{66}{subsection.6.4.2}%
+\contentsline {chapter}{\numberline {A}Uso de Docker y Docker Compose}{67}{appendix.Alph1}%
+\contentsline {section}{\numberline {A.1}¿Qué son Docker y Docker Compose?}{67}{section.Alph1.1}%
+\contentsline {section}{\numberline {A.2}Instalación en Linux (Ubuntu/Debian)}{67}{section.Alph1.2}%
+\contentsline {section}{\numberline {A.3}Instalación en Windows}{68}{section.Alph1.3}%
+\contentsline {section}{\numberline {A.4}Descripción del archivo \texttt {docker-compose.yml}}{69}{section.Alph1.4}%
+\contentsline {section}{\numberline {A.5}Scripts de control del contenedor}{72}{section.Alph1.5}%
+\contentsline {subsection}{\numberline {A.5.1}\texttt {start\_container.sh}}{72}{subsection.Alph1.5.1}%
+\contentsline {subsection}{\numberline {A.5.2}\texttt {restart\_container.sh}}{72}{subsection.Alph1.5.2}%
+\contentsline {subsection}{\numberline {A.5.3}\texttt {stop\_container.sh}}{73}{subsection.Alph1.5.3}%
+\contentsline {section}{\numberline {A.6}Proceso de uso y desarrollo del contenedor}{73}{section.Alph1.6}%
+\contentsline {chapter}{\numberline {B}Scripts}{75}{appendix.Alph2}%

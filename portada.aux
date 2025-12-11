@@ -9,7 +9,7 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \babel@aux{spanish}{}
-\@writefile{toc}{\contentsline {chapter}{Lista de Códigos}{\es@scroman  {iii}}{chapter*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Lista de Códigos}{\es@scroman  {v}}{chapter*.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Introducción del Proyecto}{1}{chapter.1}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
@@ -33,17 +33,291 @@
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}Caracterización inicial}{7}{section.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Limpieza de datos}{7}{section.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Determinación de puntos de recorrido}{7}{section.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Determinación de tiempos de pausa}{8}{section.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}Determinación de longitudes de vuelo}{8}{section.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Resultados}{9}{chapter.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Exploración del conjunto de datos}{7}{subsection.4.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Conteo de registros y dimensiones de la base de datos}{8}{subsection.4.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Limpieza de datos}{8}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Selección de campos relevantes para el análisis}{8}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Eliminación de columnas redundantes o sin valor analítico}{9}{subsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Filtrado de registros con baja precisión GPS}{9}{subsection.4.2.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Frecuencia de aparación de los valores de 'device\_horizontal\_accuracy'.}}{10}{figure.caption.5}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:accuracy_histogram}{{4.1}{10}{Frecuencia de aparación de los valores de 'device\_horizontal\_accuracy'}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Análisis de frecuencia de aparición de identificadores únicos}{10}{subsection.4.2.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Frecuencia de aparición de los identificadores únicos.}}{10}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:identifier_histogram}{{4.2}{10}{Frecuencia de aparición de los identificadores únicos}{figure.caption.6}{}}
+\newlabel{fig:repeticiones_sub1}{{4.3a}{11}{Histograma 1-99 repeticiones}{figure.caption.7}{}}
+\newlabel{sub@fig:repeticiones_sub1}{{a}{11}{Histograma 1-99 repeticiones}{figure.caption.7}{}}
+\newlabel{fig:repeticiones_sub2}{{4.3b}{11}{Histograma 100–1000 repeticiones}{figure.caption.7}{}}
+\newlabel{sub@fig:repeticiones_sub2}{{b}{11}{Histograma 100–1000 repeticiones}{figure.caption.7}{}}
+\newlabel{fig:repeticiones_sub3}{{4.3c}{11}{Histograma 1001–10000 repeticiones}{figure.caption.7}{}}
+\newlabel{sub@fig:repeticiones_sub3}{{c}{11}{Histograma 1001–10000 repeticiones}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Comparación de histogramas por rangos de repeticiones.}}{11}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:histogramas}{{4.3}{11}{Comparación de histogramas por rangos de repeticiones}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Frecuencia de aparición de los identificadores únicos después de eliminar duplicados.}}{12}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:identifier_histogram_deduplicate}{{4.4}{12}{Frecuencia de aparición de los identificadores únicos después de eliminar duplicados}{figure.caption.8}{}}
+\newlabel{fig:sub1}{{4.5a}{13}{Histograma 1-99 repeticiones}{figure.caption.9}{}}
+\newlabel{sub@fig:sub1}{{a}{13}{Histograma 1-99 repeticiones}{figure.caption.9}{}}
+\newlabel{fig:sub2}{{4.5b}{13}{Histograma 100–1000 repeticiones}{figure.caption.9}{}}
+\newlabel{sub@fig:sub2}{{b}{13}{Histograma 100–1000 repeticiones}{figure.caption.9}{}}
+\newlabel{fig:sub3}{{4.5c}{13}{Histograma 1001–10000 repeticiones}{figure.caption.9}{}}
+\newlabel{sub@fig:sub3}{{c}{13}{Histograma 1001–10000 repeticiones}{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Comparación de histogramas por rangos de repeticiones.}}{13}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:histogramasDeDuplicate}{{4.5}{13}{Comparación de histogramas por rangos de repeticiones}{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Desarrollo de algoritmo de puntuación compuesta basado en métricas}{13}{subsection.4.2.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Porcentaje de puntos de recorrido con precisión GPS.}}{13}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:precision_gps}{{4.6}{13}{Porcentaje de puntos de recorrido con precisión GPS}{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Porcentaje de individuos con más de tres puntos de recorrido.}}{14}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:individuos_mas_de_3_puntos}{{4.7}{14}{Porcentaje de individuos con más de tres puntos de recorrido}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Porcentaje de individuos con más de tres puntos de recorrido y precisión GPS.}}{14}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:individuos_mas_de_3_y_precision}{{4.8}{14}{Porcentaje de individuos con más de tres puntos de recorrido y precisión GPS}{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.6}Clasificación de trayectorias en categorías cualitativas}{15}{subsection.4.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Determinación de puntos de recorrido}{17}{section.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Distribución temporal y frecuencia}{17}{subsection.4.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Cálculo de velocidades}{19}{subsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Speed\_histogram.py: Análisis poblacional}{20}{paragraph*.14}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Clasificación de velocidades por modo de transporte}}{20}{table.caption.15}\protected@file@percent }
+\newlabel{tab:clasificacion_velocidades}{{4.1}{20}{Clasificación de velocidades por modo de transporte}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {paragraph}{Speed\_vector.py: Análisis individual detallado}{21}{paragraph*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Aplicación de filtro peatonal}{23}{subsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Parámetros biomecánicos del filtro}{23}{subsubsection*.17}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Parámetros estadísticos del filtro peatonal}}{23}{table.caption.18}\protected@file@percent }
+\newlabel{tab:parametros_peatonal}{{4.2}{23}{Parámetros estadísticos del filtro peatonal}{table.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.4}Visualización geográfica}{26}{subsection.4.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Show\_coordinates.py: Visualización individual interactiva}{27}{subsubsection*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{City\_distribution\_map.py: Visualización agregada multi-usuario}{27}{subsubsection*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Graph.py: Visualizaciones estáticas multi-propósito}{28}{subsubsection*.21}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Tipos de visualizaciones estáticas generadas}}{28}{table.caption.22}\protected@file@percent }
+\newlabel{tab:visualizaciones_estaticas}{{4.3}{28}{Tipos de visualizaciones estáticas generadas}{table.caption.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.5}Implementación de algoritmo de \textit  {clustering}}{30}{subsection.4.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Preparación de datos}{31}{subsubsection*.23}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Características utilizadas para el análisis de clustering}}{31}{table.caption.24}\protected@file@percent }
+\newlabel{tab:caracteristicas_clustering}{{4.4}{31}{Características utilizadas para el análisis de clustering}{table.caption.24}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Análisis exploratorio preliminar}{31}{subsubsection*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Determinación del número óptimo de clusters}{32}{subsubsection*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Método del codo (Elbow Method)}{32}{paragraph*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Método del coeficiente de Silhouette}{32}{paragraph*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Ejecución del algoritmo K-Means}{32}{subsubsection*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Análisis e interpretación de clusters}{33}{subsubsection*.30}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Umbrales para caracterización cualitativa de clusters}}{33}{table.caption.31}\protected@file@percent }
+\newlabel{tab:umbrales_clusters}{{4.5}{33}{Umbrales para caracterización cualitativa de clusters}{table.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces Tipologías de clusters esperadas}}{34}{table.caption.32}\protected@file@percent }
+\newlabel{tab:tipologias_esperadas}{{4.6}{34}{Tipologías de clusters esperadas}{table.caption.32}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Determinación de tiempos de pausa}{36}{section.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Preparación de datos y segmentación temporal}{36}{subsubsection*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Detección de movimiento y clasificación de puntos}{36}{subsubsection*.34}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces Clasificación de puntos basada en umbral de distancia}}{37}{table.caption.35}\protected@file@percent }
+\newlabel{tab:clasificacion_movimiento}{{4.7}{37}{Clasificación de puntos basada en umbral de distancia}{table.caption.35}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Cálculo de métricas de pausa}{37}{subsubsection*.36}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces Métricas calculadas para cada pausa identificada}}{37}{table.caption.37}\protected@file@percent }
+\newlabel{tab:metricas_pausa}{{4.8}{37}{Métricas calculadas para cada pausa identificada}{table.caption.37}{}}
+\@writefile{toc}{\contentsline {paragraph}{Filtrado de calidad}{37}{paragraph*.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Análisis estadístico exhaustivo}{37}{subsubsection*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Estadísticas globales}{38}{paragraph*.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Patrones temporales}{38}{paragraph*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Relaciones exploratorias}{38}{paragraph*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Visualización comprehensiva}{38}{subsubsection*.43}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Figura 1: Análisis de duración de pausas}{38}{paragraph*.44}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Figura 2: Análisis temporal y contextual}{39}{paragraph*.45}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Salida de resultados}{39}{subsubsection*.46}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.9}{\ignorespaces Archivos de salida del análisis de tiempos de pausa}}{39}{table.caption.47}\protected@file@percent }
+\newlabel{tab:archivos_pausa}{{4.9}{39}{Archivos de salida del análisis de tiempos de pausa}{table.caption.47}{}}
+\@writefile{toc}{\contentsline {paragraph}{Distribución multimodal de duraciones}{40}{paragraph*.48}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Patrones temporales esperados}{40}{paragraph*.49}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Características de usuarios}{40}{paragraph*.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Implicaciones para el modelado de movilidad}{40}{subsubsection*.51}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Determinación de longitudes de vuelo}{41}{section.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Cálculo de longitudes de trayectoria}{41}{subsubsection*.52}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Análisis de distribución básico}{41}{subsubsection*.53}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.10}{\ignorespaces Visualizaciones del análisis de distribución básica}}{41}{table.caption.54}\protected@file@percent }
+\newlabel{tab:analisis_basico}{{4.10}{41}{Visualizaciones del análisis de distribución básica}{table.caption.54}{}}
+\@writefile{toc}{\contentsline {paragraph}{Interpretación del gráfico Q-Q}{42}{paragraph*.55}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Ajuste de distribuciones teóricas}{42}{subsubsection*.56}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.11}{\ignorespaces Distribuciones teóricas evaluadas para ajuste}}{42}{table.caption.57}\protected@file@percent }
+\newlabel{tab:distribuciones_teoricas}{{4.11}{42}{Distribuciones teóricas evaluadas para ajuste}{table.caption.57}{}}
+\@writefile{toc}{\contentsline {paragraph}{Métodos de ajuste y evaluación}{42}{paragraph*.58}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Figura 1: Comparación de top distribuciones}{43}{paragraph*.59}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Figura 2: Análisis individual por distribución}{43}{paragraph*.60}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.12}{\ignorespaces Estadísticas descriptivas calculadas}}{44}{table.caption.61}\protected@file@percent }
+\newlabel{tab:estadisticas_descriptivas}{{4.12}{44}{Estadísticas descriptivas calculadas}{table.caption.61}{}}
+\@writefile{toc}{\contentsline {paragraph}{Forma de la distribución}{45}{paragraph*.62}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.13}{\ignorespaces Resultados estadísticos esperados}}{46}{table.caption.63}\protected@file@percent }
+\newlabel{tab:resultados_esperados}{{4.13}{46}{Resultados estadísticos esperados}{table.caption.63}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Resultados}{47}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo futuro}{10}{chapter.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Resultados de Clasificación de Calidad de Trayectorias}{47}{section.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Distribución de individuos por categoría de calidad}}{47}{table.caption.64}\protected@file@percent }
+\newlabel{tab:distribucion_calidad}{{5.1}{47}{Distribución de individuos por categoría de calidad}{table.caption.64}{}}
+\@writefile{toc}{\contentsline {paragraph}{Análisis de la distribución}{47}{paragraph*.65}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Resultados de Extracción de Trayectorias Peatonales}{48}{section.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Resultados de la extracción de trayectorias peatonales}}{48}{table.caption.66}\protected@file@percent }
+\newlabel{tab:resultados_peatonales}{{5.2}{48}{Resultados de la extracción de trayectorias peatonales}{table.caption.66}{}}
+\@writefile{toc}{\contentsline {paragraph}{Análisis de reducción por filtrado}{48}{paragraph*.67}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Resultados del Análisis de Clustering (K-Means)}{48}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Configuración y distribución general}{48}{subsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Calidad del clustering}{48}{paragraph*.69}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Distribución de individuos por cluster (valores aproximados)}}{49}{table.caption.68}\protected@file@percent }
+\newlabel{tab:distribucion_clusters}{{5.3}{49}{Distribución de individuos por cluster (valores aproximados)}{table.caption.68}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Caracterización detallada de clusters}{49}{subsection.5.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Caracterización cuantitativa de los clusters identificados}}{49}{table.caption.70}\protected@file@percent }
+\newlabel{tab:caracterizacion_clusters}{{5.4}{49}{Caracterización cuantitativa de los clusters identificados}{table.caption.70}{}}
+\@writefile{toc}{\contentsline {paragraph}{Perfiles comportamentales}{49}{paragraph*.71}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Análisis de correlaciones entre características}{50}{subsection.5.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Correlaciones significativas identificadas}}{50}{table.caption.72}\protected@file@percent }
+\newlabel{tab:correlaciones_clustering}{{5.5}{50}{Correlaciones significativas identificadas}{table.caption.72}{}}
+\@writefile{toc}{\contentsline {paragraph}{Implicación}{50}{paragraph*.73}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.4}Distribuciones de características clave}{51}{subsection.5.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Resultados del Análisis de Longitudes de Vuelo}{51}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Estadísticas descriptivas básicas}{51}{subsection.5.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Estadísticas descriptivas de longitudes de vuelo}}{51}{table.caption.74}\protected@file@percent }
+\newlabel{tab:estadisticas_longitudes}{{5.6}{51}{Estadísticas descriptivas de longitudes de vuelo}{table.caption.74}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces Métricas de forma de la distribución de longitudes}}{52}{table.caption.75}\protected@file@percent }
+\newlabel{tab:metricas_forma}{{5.7}{52}{Métricas de forma de la distribución de longitudes}{table.caption.75}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}Métricas de forma de la distribución}{52}{subsection.5.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Interpretación de las métricas de forma}{52}{paragraph*.76}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}Distribución inflada en cero}{52}{subsection.5.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.4}Ajuste de distribuciones teóricas}{52}{subsection.5.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Conclusiones del ajuste}{52}{paragraph*.79}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implicación para modelado}{52}{paragraph*.80}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces Segmentación de usuarios por patrón de movilidad}}{53}{table.caption.77}\protected@file@percent }
+\newlabel{tab:segmentacion_movilidad}{{5.8}{53}{Segmentación de usuarios por patrón de movilidad}{table.caption.77}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.5}Análisis de outliers extremos}{53}{subsection.5.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Outlier máximo}{53}{paragraph*.81}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Recomendaciones para modelado futuro}{53}{paragraph*.82}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.9}{\ignorespaces Resultados del ajuste de distribuciones teóricas}}{54}{table.caption.78}\protected@file@percent }
+\newlabel{tab:ajuste_distribuciones}{{5.9}{54}{Resultados del ajuste de distribuciones teóricas}{table.caption.78}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Resultados del Análisis de Tiempos de Pausa}{54}{section.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.1}Cobertura y estadísticas generales}{54}{subsection.5.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.10}{\ignorespaces Cobertura del análisis de tiempos de pausa}}{54}{table.caption.83}\protected@file@percent }
+\newlabel{tab:cobertura_pausas}{{5.10}{54}{Cobertura del análisis de tiempos de pausa}{table.caption.83}{}}
+\@writefile{toc}{\contentsline {paragraph}{Observación crítica}{54}{paragraph*.84}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.11}{\ignorespaces Estadísticas de duración de pausas}}{55}{table.caption.85}\protected@file@percent }
+\newlabel{tab:estadisticas_pausas}{{5.11}{55}{Estadísticas de duración de pausas}{table.caption.85}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.2}Distribución de duraciones de pausa}{55}{subsection.5.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Análisis de la dispersión}{55}{paragraph*.86}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.3}Segmentación por duración}{55}{subsection.5.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.12}{\ignorespaces Distribución de pausas por categoría de duración}}{55}{table.caption.87}\protected@file@percent }
+\newlabel{tab:distribucion_pausas}{{5.12}{55}{Distribución de pausas por categoría de duración}{table.caption.87}{}}
+\@writefile{toc}{\contentsline {paragraph}{Patrón bimodal identificado}{55}{paragraph*.88}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Interpretación comportamental}{55}{paragraph*.89}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implicación fundamental}{56}{paragraph*.90}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusiones y Trabajo futuro}{57}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Conclusiones Generales}{57}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Conclusiones por Objetivo}{57}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Caracterización de la base de datos}{57}{subsection.6.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Calidad GPS:}{57}{paragraph*.91}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Distribución de identificadores:}{58}{paragraph*.92}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cobertura temporal:}{58}{paragraph*.93}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implicación principal:}{58}{paragraph*.94}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Algoritmo de clasificación de calidad}{58}{subsection.6.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Resultados del algoritmo:}{58}{paragraph*.95}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Validación del algoritmo:}{58}{paragraph*.96}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Fortalezas del algoritmo:}{59}{paragraph*.97}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Limitaciones identificadas:}{59}{paragraph*.98}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}Identificación de trayectorias peatonales}{59}{subsection.6.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Efectividad del filtrado:}{59}{paragraph*.99}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Segmentación de trayectorias:}{59}{paragraph*.100}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cobertura geográfica:}{60}{paragraph*.101}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Desafío principal:}{60}{paragraph*.102}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.4}Aplicación de inteligencia artificial: Clustering K-Means}{60}{subsection.6.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hallazgos principales:}{60}{paragraph*.103}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Validación cruzada:}{61}{paragraph*.104}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implicación para el modelado:}{61}{paragraph*.105}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.5}Caracterización de elementos del modelo de movilidad}{61}{subsection.6.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Puntos de recorrido:}{61}{paragraph*.106}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Tiempos de pausa:}{61}{paragraph*.107}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Longitudes de vuelo:}{62}{paragraph*.108}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Limitaciones del Estudio}{63}{section.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}Limitaciones de los datos}{63}{subsection.6.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}Limitaciones metodológicas}{64}{subsection.6.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.3}Limitaciones computacionales}{65}{subsection.6.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}Trabajo Futuro}{65}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}Mejoras inmediatas al pipeline actual}{65}{subsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.2}Extensiones metodológicas}{66}{subsection.6.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Uso de Docker y Docker Compose}{67}{appendix.Alph1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{anexo:docker}{{A}{67}{Uso de Docker y Docker Compose}{appendix.Alph1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}¿Qué son Docker y Docker Compose?}{67}{section.Alph1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}Instalación en Linux (Ubuntu/Debian)}{67}{section.Alph1.2}\protected@file@percent }
+\newlabel{cod:update_system}{{A.1}{67}{Actualizar el sistema}{lstlisting.Alph1.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.1}{\ignorespaces Actualizar el sistema.}}{67}{lstlisting.Alph1.1}\protected@file@percent }
+\newlabel{cod:install_docker}{{A.2}{68}{Instalar Docker}{lstlisting.Alph1.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.2}{\ignorespaces Instalar Docker.}}{68}{lstlisting.Alph1.2}\protected@file@percent }
+\newlabel{cod:check_docker}{{A.3}{68}{Verificar instalación de Docker}{lstlisting.Alph1.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.3}{\ignorespaces Verificar instalación de Docker.}}{68}{lstlisting.Alph1.3}\protected@file@percent }
+\newlabel{cod:install_docker_compose}{{A.4}{68}{Instalar Docker Compose}{lstlisting.Alph1.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.4}{\ignorespaces Instalar Docker Compose.}}{68}{lstlisting.Alph1.4}\protected@file@percent }
+\newlabel{cod:check_docker_compose}{{A.5}{68}{Verificar instalación de Docker Compose}{lstlisting.Alph1.5}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.5}{\ignorespaces Verificar instalación de Docker Compose.}}{68}{lstlisting.Alph1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}Instalación en Windows}{68}{section.Alph1.3}\protected@file@percent }
+\newlabel{cod:check_docker_windows}{{A.6}{68}{Verificar instalación de Docker y Docker Compose}{lstlisting.Alph1.6}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.6}{\ignorespaces Verificar instalación de Docker y Docker Compose.}}{68}{lstlisting.Alph1.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.4}Descripción del archivo \texttt  {docker-compose.yml}}{69}{section.Alph1.4}\protected@file@percent }
+\newlabel{cod:docker_compose_file}{{A.7}{69}{Archivo docker-compose.yml}{lstlisting.Alph1.7}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.7}{\ignorespaces Archivo docker-compose.yml}}{69}{lstlisting.Alph1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.5}Scripts de control del contenedor}{72}{section.Alph1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5.1}\texttt  {start\_container.sh}}{72}{subsection.Alph1.5.1}\protected@file@percent }
+\newlabel{cod:start_script}{{A.8}{72}{Script para iniciar el contenedor}{lstlisting.Alph1.8}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.8}{\ignorespaces Script para iniciar el contenedor.}}{72}{lstlisting.Alph1.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5.2}\texttt  {restart\_container.sh}}{72}{subsection.Alph1.5.2}\protected@file@percent }
+\newlabel{cod:restart_script}{{A.9}{72}{Script para reiniciar el contenedor}{lstlisting.Alph1.9}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.9}{\ignorespaces Script para reiniciar el contenedor.}}{72}{lstlisting.Alph1.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5.3}\texttt  {stop\_container.sh}}{73}{subsection.Alph1.5.3}\protected@file@percent }
+\newlabel{cod:stop_script}{{A.10}{73}{Script para detener y eliminar el contenedor y sus volúmenes}{lstlisting.Alph1.10}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.10}{\ignorespaces Script para detener y eliminar el contenedor y sus volúmenes.}}{73}{lstlisting.Alph1.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.6}Proceso de uso y desarrollo del contenedor}{73}{section.Alph1.6}\protected@file@percent }
+\newlabel{cod:chmod_scripts}{{A.11}{73}{Dar permisos de ejecución a los scripts}{lstlisting.Alph1.11}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.11}{\ignorespaces Dar permisos de ejecución a los scripts.}}{73}{lstlisting.Alph1.11}\protected@file@percent }
+\newlabel{cod:run_dev}{{A.12}{73}{Iniciar contenedor y ejecutar el proyecto}{lstlisting.Alph1.12}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.12}{\ignorespaces Iniciar contenedor y ejecutar el proyecto.}}{73}{lstlisting.Alph1.12}\protected@file@percent }
+\newlabel{cod:restart_dev}{{A.13}{73}{Reiniciar el contenedor completamente}{lstlisting.Alph1.13}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.13}{\ignorespaces Reiniciar el contenedor completamente.}}{73}{lstlisting.Alph1.13}\protected@file@percent }
+\newlabel{cod:stop_dev}{{A.14}{73}{Eliminar el contenedor y limpiar el entorno}{lstlisting.Alph1.14}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.14}{\ignorespaces Eliminar el contenedor y limpiar el entorno.}}{73}{lstlisting.Alph1.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Scripts}{75}{appendix.Alph2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{anexo:scripts}{{B}{75}{Scripts}{appendix.Alph2}{}}
+\newlabel{cod:csv_glance}{{B.1}{75}{csv\_glance.py, exploración inicial del conjunto de datos}{lstlisting.Alph2.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.1}{\ignorespaces csv\_glance.py, exploración inicial del conjunto de datos.}}{75}{lstlisting.Alph2.1}\protected@file@percent }
+\newlabel{cod:csv_count}{{B.2}{76}{csv\_count\_registers.py, conteo de registros en el conjunto de datos}{lstlisting.Alph2.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.2}{\ignorespaces csv\_count\_registers.py, conteo de registros en el conjunto de datos.}}{76}{lstlisting.Alph2.2}\protected@file@percent }
+\newlabel{cod:csv_slim}{{B.3}{77}{remove\_columns.py, eliminación de campos innecesarios en el conjunto de datos}{lstlisting.Alph2.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.3}{\ignorespaces remove\_columns.py, eliminación de campos innecesarios en el conjunto de datos.}}{77}{lstlisting.Alph2.3}\protected@file@percent }
+\newlabel{cod:unique_values}{{B.4}{78}{unique\_values.py, obtención de valores únicos de la columna 'device\_horizontal\_accuracy'}{lstlisting.Alph2.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.4}{\ignorespaces unique\_values.py, obtención de valores únicos de la columna 'device\_horizontal\_accuracy'.}}{78}{lstlisting.Alph2.4}\protected@file@percent }
+\newlabel{cod:accuracy_histogram}{{B.5}{80}{accuracy\_histogram.py, creación de un histograma de frecuencias de la columna 'device\_horizontal\_accuracy'}{lstlisting.Alph2.5}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.5}{\ignorespaces accuracy\_histogram.py, creación de un histograma de frecuencias de la columna 'device\_horizontal\_accuracy'.}}{80}{lstlisting.Alph2.5}\protected@file@percent }
+\newlabel{cod:identifier_histogram}{{B.6}{83}{identifier\_histogram.py, creación de un histograma de frecuencias de la columna 'identifier'}{lstlisting.Alph2.6}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.6}{\ignorespaces identifier\_histogram.py, creación de un histograma de frecuencias de la columna 'identifier'.}}{83}{lstlisting.Alph2.6}\protected@file@percent }
+\newlabel{cod:identifier_histogram_detailed}{{B.7}{86}{identifier\_histogram\_detailed.py, análisis de frecuencias de la columna 'identifier'}{lstlisting.Alph2.7}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.7}{\ignorespaces identifier\_histogram\_detailed.py, análisis de frecuencias de la columna 'identifier'.}}{86}{lstlisting.Alph2.7}\protected@file@percent }
+\newlabel{cod:csv_deduplicate}{{B.8}{90}{csv\_deduplicate.py, eliminación de duplicados en el conjunto de datos}{lstlisting.Alph2.8}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.8}{\ignorespaces csv\_deduplicate.py, eliminación de duplicados en el conjunto de datos.}}{90}{lstlisting.Alph2.8}\protected@file@percent }
+\newlabel{cod:identifier_histogram_daily}{{B.9}{91}{identifier\_histogram\_daily.py, análisis de frecuencias de la columna 'identifier' por día}{lstlisting.Alph2.9}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.9}{\ignorespaces identifier\_histogram\_daily.py, análisis de frecuencias de la columna 'identifier' por día.}}{91}{lstlisting.Alph2.9}\protected@file@percent }
+\newlabel{cod:migrate_csv_to_postgres}{{B.10}{95}{migrate\_csv\_to\_postgres.py, migración de datos desde un CSV a una base de datos PostgreSQL}{lstlisting.Alph2.10}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.10}{\ignorespaces migrate\_csv\_to\_postgres.py, migración de datos desde un CSV a una base de datos PostgreSQL.}}{95}{lstlisting.Alph2.10}\protected@file@percent }
+\newlabel{cod:query_precision_gps}{{B.11}{98}{Porcentaje de individuos con precisión de GPS mejor a 20 metros}{lstlisting.Alph2.11}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.11}{\ignorespaces Porcentaje de individuos con precisión de GPS mejor a 20 metros}}{98}{lstlisting.Alph2.11}\protected@file@percent }
+\newlabel{cod:query_individuos_mas_de_3_registros}{{B.12}{99}{Query para contar individuos con más de 3 registros}{lstlisting.Alph2.12}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.12}{\ignorespaces Query para contar individuos con más de 3 registros}}{99}{lstlisting.Alph2.12}\protected@file@percent }
+\newlabel{cod:query_individuos_mas_de_3_y_precision}{{B.13}{99}{Query para contar individuos con más de 3 registros y precisión de GPS}{lstlisting.Alph2.13}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.13}{\ignorespaces Query para contar individuos con más de 3 registros y precisión de GPS}}{99}{lstlisting.Alph2.13}\protected@file@percent }
+\newlabel{cod:query_calidad_trayectorias}{{B.14}{99}{Query para calcular la calidad de las trayectorias de movilidad}{lstlisting.Alph2.14}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.14}{\ignorespaces Query para calcular la calidad de las trayectorias de movilidad}}{99}{lstlisting.Alph2.14}\protected@file@percent }
+\newlabel{cod:pedestrian_trayectories}{{B.15}{102}{pedestrian\_trajectories.py, Clasificación de trajectorias peatonales}{lstlisting.Alph2.15}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.15}{\ignorespaces pedestrian\_trajectories.py, Clasificación de trajectorias peatonales}}{102}{lstlisting.Alph2.15}\protected@file@percent }
+\newlabel{cod:routine_individuals}{{B.16}{112}{routine\_individuals.py, Análisis de la distribución temporal y frecuencia de individuos}{lstlisting.Alph2.16}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.16}{\ignorespaces routine\_individuals.py, Análisis de la distribución temporal y frecuencia de individuos}}{112}{lstlisting.Alph2.16}\protected@file@percent }
+\newlabel{cod:}{{B.17}{116}{.py,}{lstlisting.Alph2.17}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.17}{\ignorespaces .py,}}{116}{lstlisting.Alph2.17}\protected@file@percent }
+\newlabel{cod:}{{B.18}{116}{.py,}{lstlisting.Alph2.18}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.18}{\ignorespaces .py,}}{116}{lstlisting.Alph2.18}\protected@file@percent }
 \bibcite{ref1}{1}
 \bibcite{ref2}{2}
 \bibcite{ref3}{3}
-\gdef \@abspage@last{15}
+\gdef \@abspage@last{124}

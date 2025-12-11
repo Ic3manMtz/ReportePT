@@ -1,49 +1,1629 @@
+% --------------------------
+% CARACTERIZACIÓN INICIAL
+% --------------------------
 \section{Caracterización inicial}
-\begin{itemize}
-	\item Exploración del conjunto de datos, identificación de columnas y filas irrelevantes.
-	\item Conteo de registros y dimensiones de la base de datos.
-	\item Inspección de valores únicos y estructura general.
-\end{itemize}
+\subsection{Exploración del conjunto de datos}
+Como primer paso en la caracterización, se realiza una exploración preliminar del conjunto de datos con el fin de comprender su estructura general. Para ello, se inspeccionan las primeras dos filas del conjunto de datos, lo cual permite identificar las columnas presentes y observar ejemplos representativos de sus valores.
 
+El código utilizado para realizar esta exploración se encuentra en el Apéndice \ref{cod:csv_glance}. A continuación, se presenta un resumen de las columnas detectadas junto con una muestra de sus respectivos valores:
+
+\begin{enumerate}[leftmargin=*, align=left, noitemsep]
+	\item \texttt{id}: Identificador numérico único por registro \\
+	\footnotesize{\texttt{['34284565','34284566']}}
+	\normalsize
+	
+	\item \texttt{identifier}: UUID del dispositivo \\ 
+	\footnotesize{\texttt{['f2640430-7e39-41b7-80bb-3fddaa44779c']}}
+	\normalsize
+	
+	\item \texttt{identifier\_type}: Tipo de ID (ej. \texttt{'gaid'} para Android) \\ 
+	\footnotesize{\texttt{['gaid', 'gaid']}}
+	\normalsize
+	
+	\item \texttt{timestamp}: Fecha-hora del registro \\ 
+	\footnotesize{\texttt{['2022-11-07 02:04:21']}}
+	\normalsize
+	
+	\item \texttt{device\_lat}/\texttt{device\_lon}: Coordenadas GPS \\ 
+	\footnotesize{\texttt{['21.843149']}, \texttt{['-102.196838']}}
+	\normalsize
+	
+	\item \texttt{country\_short}/\texttt{province\_short}: Códigos de ubicación \\ 
+	\footnotesize{\texttt{['MX']}, \texttt{['MX.01']}}
+	\normalsize
+	
+	\item \texttt{ip\_address}: Dirección IPv6 \\ 
+	\footnotesize{\texttt{['2806:103e:16::']}}
+	\normalsize
+	
+	\item \texttt{device\_horizontal\_accuracy}: Precisión GPS en metros \\ 
+	\footnotesize{\texttt{['8.0']}}
+	\normalsize
+	
+	\item \texttt{source\_id}: Hash de la fuente de datos \\ 
+	\footnotesize{\texttt{['449d086d...344']}}
+	\normalsize
+	
+	\item \texttt{record\_id}: Hash único por registro \\ 
+	\footnotesize{\texttt{['77d795df...']}}
+	\normalsize
+	
+	\item \texttt{home\_country\_code}: País de residencia \\ 
+	\footnotesize{\texttt{['MX']}}
+	\normalsize
+	
+	\item \texttt{home\_geog\_point}/\texttt{work\_geog\_point}: Coordenadas en WKT \\ 
+	\footnotesize{\texttt{['POINT(-102.37038 22.20753)']}}
+	\normalsize
+	
+	\item \texttt{home\_hex\_id}/\texttt{work\_hex\_id}: ID hexagonal (H3) \\ 
+	\footnotesize{\texttt{['85498853fffffff']}}
+	\normalsize
+	
+	\item \texttt{data\_execute}: Fecha de procesamiento \\ 
+	\footnotesize{\texttt{['2023-05-30']}}
+	\normalsize
+	
+	\item \texttt{time\_zone\_name}: Zona horaria \\ 
+	\footnotesize{\texttt{['America/Mexico\_City']}}
+	\normalsize
+\end{enumerate}
+
+
+
+\subsection{Conteo de registros y dimensiones de la base de datos}
+Conocer las dimensiones exactas del conjunto de datos es crucial para planificar el análisis posterior, se utiliza la biblioteca \textit{Dask DataFrame}, que permite trabajar con grandes volúmenes de datos de manera eficiente. Para hacer uso de esta biblioteca se usa el lenguaje de programación \textit{Python}. El código del Apéndice \ref{cod:csv_count} nos da un ejemplo de su uso para esta etapa. El resultado de este \textit{script} da como resultado que el conjunto de datos contiene un total de \textbf{69,980,000} registros y \textbf{19} campos. Esto indica que hay una cantidad significativa de datos disponibles para el análisis.
+
+%\subsection{Inspección de valores únicos y estructura general}
+%Análisis pendiente
+
+% --------------------------
+% LIMPIEZA DE DATOS
+% --------------------------
 \section{Limpieza de datos}
+\subsection{Selección de campos relevantes para el análisis}
+Dado que el conjunto de datos original contiene 19 campos, es fundamental identificar y eliminar aquellas columnas que no aportan valor al análisis. Para ello, se realiza una revisión de los valores únicos presentes en cada campo, con el objetivo de detectar información redundante o irrelevante. A partir de este análisis, se identifican las siguientes columnas como innecesarias para los fines del estudio:
+
 \begin{itemize}
-	\item Selección de campos relevantes para el análisis.
-	\item Eliminación de columnas redundantes o sin valor analítico.
-	\item Conservación de columnas clave: \textit{identificador}, \textit{timestamp}, \textit{coordenadas}, \textit{precisión GPS}.
-	\item Eliminación de registros duplicados basados en \textit{identificador}, \textit{timestamp} y \textit{coordenadas}.
-	\item Filtrado de registros con baja precisión GPS mayor a 20 metros.
-	\item Análisis de frecuencia de aparición de identificadores únicos.
-	\item Desarrollo de algoritmo de puntuación compuesta basado en métricas 
-	\item Clasificación de trayectorias en categorías cualitativas.
+	\item \texttt{id}
+	\item \texttt{identifier\_type}
+	\item \texttt{country\_short}
+	\item \texttt{province\_short}
+	\item \texttt{ip\_address}
+	\item \texttt{source\_id}
+	\item \texttt{home\_country\_code}
+	\item \texttt{home\_geog\_point}
+	\item \texttt{work\_geog\_point}
+	\item \texttt{home\_hex\_id}
+	\item \texttt{work\_hex\_id}
+	\item \texttt{data\_execute}
 \end{itemize}
 
-\section{Determinación de puntos de recorrido}
+\subsection{Eliminación de columnas redundantes o sin valor analítico}
+En lugar de eliminar columnas explícitamente, se opta por seleccionar únicamente aquellas que se desean conservar. El código utilizado para esta tarea se encuentra incluido en el Apéndice \ref{cod:csv_slim}. Dicho script emplea la biblioteca \texttt{dask} para cargar y guardar una nueva versión del conjunto de datos que contiene exclusivamente las siguientes columnas relevantes: 
 \begin{itemize}
-	\item Distribución de individuos por día mediante histogramas temporales.
-	\item Cálculo de frecuencia de aparición y persistencia temporal.
-	\item Identificación de individuos con registros en múltiples días.
-	\item Cálculo de velocidades entre puntos consecutivos.
-	\item Creación de histograma de distribución de velocidades.
-	\item Aplicación de filtro peatonal utilizando parámetros estadísticos:
+	\item \texttt{identifier}
+	\item \texttt{timestamp}
+	\item \texttt{device\_lat}
+	\item \texttt{device\_lon}
+	\item \texttt{device\_horizontal\_accuracy}
+	\item \texttt{record\_id}
+	\item \texttt{time\_zone\_name}
+\end{itemize}
+ 
+Como resultado, se genera un nuevo archivo \texttt{CSV} que conserva únicamente la información útil para el análisis posterior, optimizando así el tamaño y la calidad del conjunto de datos.
+
+\subsection{Filtrado de registros con baja precisión GPS}
+La primera columna a analizar será \texttt{device\_horizontal\_accuracy}, que refleja la precisión del GPS en metros. Este valor depende tanto del sistema de medición como de la fuente de datos, y suele clasificarse según la siguiente escala:
+
+\begin{itemize}
+	\item GPS puro (satelital): 1–20 metros.
+	\item A-GPS (asistido por red): 5–50 metros.
+	\item Triangulación por WiFi o redes móviles: 20–500 metros.
+	\item Geolocalización por IP: 1000–5000 metros.
+\end{itemize}
+
+Con base en esta escala,  primero hay que identificar el rango de valores presentes en la columna. Para ello se utiliza el código mostrado en el Apéndice \ref{cod:unique_values}, el cual extrae los valores únicos de \texttt{device\_horizontal\_accuracy} y los guarda en un archivo de texto. El resultado indica que los valores oscilan entre 0.916 y 199.9, lo que permite construir un histograma (Apéndice \ref{cod:accuracy_histogram}) para analizar la frecuencia de cada valor y así evaluar su relevancia para el análisis. El resultado se muestra en la siguiente figura:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{img/histograma_device_horizontal_accuracy_Mobility_Data_Slim.png}
+	\caption{Frecuencia de aparación de los valores de 'device\_horizontal\_accuracy'.}
+	\label{fig:accuracy_histogram}
+\end{figure}
+
+Para el objetivo de este proyecto, se busca que la configuración del GPS sea lo más precisa posible, por lo que aquellos que estén dentro del rango del GPS puro (1-20 metros) son los más relevantes. Como se puede ver en la Figura \ref{fig:accuracy_histogram}, el \textbf{68.73\%} de los valores se encuentran dentro de este rango. Sin embargo, el \textbf{31.27\%} de registros con están por encima de este rango, precisión A-GPS (5-50 metros) y triangulación por WiFi/red móvil (20-500 metros).
+
+\subsection{Análisis de frecuencia de aparición de identificadores únicos}
+ Para analizar la frecuencia de aparición de estos valores se emplea un script que agrupa las repeticiones por rangos y grafica la cantidad de valores únicos usando escala logarítmica (ver Apéndice \ref{cod:identifier_histogram}).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/histograma_identifier_Mobility_Data_Slim.png}
+	\caption{Frecuencia de aparición de los identificadores únicos.}
+	\label{fig:identifier_histogram}
+\end{figure}
+
+Ejecutar este código permite saber que el total de individuos es de \textbf{6,022,772} de los cuales el \textbf{79.19\%} tienen una frecuencia de aparición de una a nueve veces, esto es \textbf{4,769,317} de individuos. Así mismo de la Figura \ref{fig:identifier_histogram} se observa que hay poco más de un \textbf{20\%} de individuos con más de 99 repeticiones. Por lo que se necesita hacer un análisis más detallado, para ello se ejecuta el código del Apéndice \ref{cod:identifier_histogram_detailed}, el cual segmenta los datos en tres rangos: 1-99, 100-1000 y 1001-10000 repeticiones.
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{img/histograma_1-99_identifier_Mobility_Data_Slim.png}
+		\caption{Histograma 1-99 repeticiones}
+		\label{fig:repeticiones_sub1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{img/histograma_100-1k_identifier_Mobility_Data_Slim.png}
+		\caption{Histograma 100–1000 repeticiones}
+		\label{fig:repeticiones_sub2}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/histograma_1k-10k_identifier_Mobility_Data_Slim.png}
+		\caption{Histograma 1001–10000 repeticiones}
+		\label{fig:repeticiones_sub3}
+	\end{subfigure}
+	
+	\caption{Comparación de histogramas por rangos de repeticiones.}
+	\label{fig:histogramas}
+\end{figure}
+
+Con la información obtenida de los histogramas de la figura anterior, se puede observar que el \textbf{98.17\%} de los identificadores únicos tienen entre 1 y 99 repeticiones, lo que equivale a \textbf{5,912,437} individuos. Por otro lado, el \textbf{1.83\%} restante tiene entre 100 y 10,000 repeticiones, lo que equivale a \textbf{110,335} individuos. Con base en esta información aún no se puede determinar que registros eliminar.
+
+Por lo que el siguiente paso consiste en eliminar aquellos registros duplicados, es decir, aquellos que tengan el mismo valor en las columnas: 
+\texttt{identifier}, \texttt{timestamp}, \texttt{device\_lat} y \texttt{device\_lon}. Para ello se utiliza el código del Apéndice \ref{cod:csv_deduplicate}, que elimina los duplicados y genera un nuevo archivo CSV con los registros de individuos.
+
+Con este nuevo archivo se vuelve a realizar el análisis de frecuencia de aparición de individuos. En la siguiente figura se muestra el histograma de la frecuencia de aparición de los identificadores únicos
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/histograma_identifier_Mobility_Data_Slim_DeDuplicate.png}
+	\caption{Frecuencia de aparición de los identificadores únicos después de eliminar duplicados.}
+	\label{fig:identifier_histogram_deduplicate}
+\end{figure}
+
+Comparando los resultados de la Figura \ref{fig:identifier_histogram} y la Figura \ref{fig:identifier_histogram_deduplicate} podemos destacar varios hallazgos importantes: 
+
+\begin{itemize}
+	\item El número de individuos (\textbf{6,022,772}) se mantuvo sin cambios.
+	\item La eliminación del \textbf{27\%} de registros. De \textbf{70 millones} a \textbf{51 millones} de registros.
+	\item La reducción del \textbf{31.1\%} en la frecuencia máxima de aparición (de 7,400 a 5,100) corrige sesgos que afectaban especialmente a individuos con alta frecuencia de registros repetidos. 
+\end{itemize}
+
+De la Figura \ref{fig:histogramasDeDuplicate} se puede observar que la distribución de los individuos se mantiene similar; sin embargo, ahora el número de individuos que tienen entre 1 y 99 repeticiones aumentó del \textbf{98.17\%} al \textbf{98.8\%} , lo que equivale a un aumento de \textbf{37,899} individuos. Por otro lado, el número de individuos con más de 100 repeticiones bajó del \textbf{1.83\%} al \textbf{1.2\%}, lo que equivale a una disminución de \textbf{37,899} individuos, lo que sugiere que la mayoría de los individuos no generan datos de manera continua o frecuente. Sin embargo, es importante destacar que al eliminar aquellos puntos de recorrido duplicados por individuo permite asumir que los puntos de recorrido restantes son más representativos de la movilidad real de los individuos.
+
+Dado los resultados obtenidos en esta etapa de la caracterización, se concluye que no es necesario eliminar ninguna fila del conjunto de datos, ya que la depuración de columnas y la eliminación de duplicados han sido suficientes para optimizar la calidad del conjunto de datos.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{img/histograma_1-99_identifier_Mobility_Data_Slim_DeDuplicate.png}
+		\caption{Histograma 1-99 repeticiones}
+		\label{fig:sub1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{img/histograma_100-1k_identifier_Mobility_Data_Slim_DeDuplicate.png}
+		\caption{Histograma 100–1000 repeticiones}
+		\label{fig:sub2}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/histograma_1k-10k_identifier_Mobility_Data_Slim_DeDuplicate.png}
+		\caption{Histograma 1001–10000 repeticiones}
+		\label{fig:sub3}
+	\end{subfigure}
+	
+	\caption{Comparación de histogramas por rangos de repeticiones.}
+	\label{fig:histogramasDeDuplicate}
+\end{figure}
+
+
+\subsection{Desarrollo de algoritmo de puntuación compuesta basado en métricas}
+A partir de esta etapa se crea una base de datos llamada \textit{trajectories} en la que se migra el conjunto de datos limpio a una tabla llamada \textit{mobility\_data}, el script \ref{cod:migrate_csv_to_postgres} analiza automáticamente la estructura del CSV, mapea los tipos de datos, y carga los datos en partes de 1,000 registros para optimizar el rendimiento. 
+Una vez migrados los datos se analizan los datos el primer paso para encontrar las mejores trayectorias es identificar el porcentaje de puntos de recorrido que tienen una precisión de GPS mejor a 20 metros. Para esto se ejecuta el query del Apéndice \ref{cod:query_precision_gps}, cuyo resultado se muestra en la siguiente tabla.
+
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{@{}cccl@{}} \toprule
+		\begin{tabular}[c]{@{}c@{}}
+			Total Puntos\\de Recorrido
+		\end{tabular} & 
+		\begin{tabular}[c]{@{}c@{}}
+			Total Puntos de\\Recorrido con\\Precisión GPS
+		\end{tabular} &
+		\begin{tabular}[c]{@{}c@{}}
+			Porcentaje de Puntos de\\Recorrido con\\Precisión GPS
+		\end{tabular} & \\ \midrule
+		51,077,925 & 34,364,037 & 67.28\% &  \\ \bottomrule 
+	\end{tabular}
+	\caption{Porcentaje de puntos de recorrido con precisión GPS.}
+	\label{fig:precision_gps}
+\end{figure}
+
+Debido a que una trayectoria debe tener más un punto de recorrido, para este análisis se consideran únicamente los individuos que tienen más de tres puntos de recorrido. Para así obtener el porcentaje de individuos que cumplen con esta condición. Se ejecuta el query del Apéndice \ref{cod:query_individuos_mas_de_3_registros}, cuyo resultado se muestra en la siguiente tabla.
+
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{@{}cccl@{}} \toprule
+		\begin{tabular}[c]{@{}c@{}}
+			Total\\de Individuos
+		\end{tabular} & 
+		\begin{tabular}[c]{@{}c@{}}
+			Individuos con más\\de tres puntos
+		\end{tabular} &
+		\begin{tabular}[c]{@{}c@{}}
+			Porcentaje de Puntos de\\Individuos con\\más de tres puntos
+		\end{tabular} & \\ \midrule
+		6,022,772 & 2,119,560 & 35.19\% &  \\ \bottomrule 
+	\end{tabular}
+	\caption{Porcentaje de individuos con más de tres puntos de recorrido.}
+	\label{fig:individuos_mas_de_3_puntos}
+\end{figure}
+
+Ahora hay que identificar los individuos que tienen más de tres puntos de recorrido y que además tienen una precisión de GPS mejor a 20 metros. Para esto se ejecuta el query del Apéndice \ref{cod:query_individuos_mas_de_3_y_precision}, cuyo resultado se muestra en la siguiente tabla.
+
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{@{}cccl@{}} \toprule
+		\begin{tabular}[c]{@{}c@{}}
+			Total\\de Individuos
+		\end{tabular} & 
+		\begin{tabular}[c]{@{}c@{}}
+			Individuos con más\\de tres puntos\\y precisión GPS
+		\end{tabular} &
+		\begin{tabular}[c]{@{}c@{}}
+			Porcentaje de Puntos de\\Individuos con\\más de tres puntos\\ y precisión GPS
+		\end{tabular} & \\ \midrule
+		6,022,772 & 1,534,172 & 25.47\% &  \\ \bottomrule 
+	\end{tabular}
+	\caption{Porcentaje de individuos con más de tres puntos de recorrido y precisión GPS.}
+	\label{fig:individuos_mas_de_3_y_precision}
+\end{figure}
+
+Estos queries permiten identificar la calidad de los datos. A partir de estos se plantea un algoritmo de evaluación de la calidad de las trayectorias, el cual se encuentra en el Apéndice \ref{cod:query_calidad_trayectorias}. 
+
+Este algoritmo inicia con la detección de movimientos significativos. Un desplazamiento se considera significativo cuando el cambio en coordenadas entre registros consecutivos supera un umbral de 0.001 grados (equivalente a aproximadamente 111 metros). Posteriormente, se calculan para cada individuo un conjunto de métricas fundamentales de calidad de datos:
+\begin{itemize}
+	\item \textbf{Volumen de datos} (records\_counts): Número total de registros GPS.
+	\item \textbf{Cobertura temporal} (time\_span\_days): Duración total (en días) entre el primer y el último registro.
+	\item \textbf{Consistencia temporal} (active\_days\_count): Número de días únicos con al menos un registro.
+	\item \textbf{Calidad técnica} (avg\_accuracy\_meters): Precisión promedio del GPS (en metros), reportada por el dispositivo.
+	\item \textbf{Riqueza del movimiento} (movement\_points): Cantidad de movimientos significativos detectados.
+	\item \textbf{Diversidad espacial} (spatial\_range): Rango geográfico total (en grados) cubierto por la trayectoria, medido como la diferencia máxima en latitud y longitud.
+\end{itemize}
+
+\newpage
+Cada métrica se interpreta según los siguientes criterios:
+\begin{description}
+	\item[Volumen de datos]: Un mayor número de registros proporciona una base más sólida para el análisis. Se considera que trayectorias con más de 500 registros son ideales, mientras que el mínimo funcional se establece en 50 registros.
+	\item[Cobertura y consistencia temporal]: Periodos de observación extensos (\textit{time\_span\_days}) permiten capturar patrones a largo plazo. La relación de actividad (\textit{activity\_ratio = active\_days\_count / time\_span\_days}) mide la regularidad en la recolección de datos.
+	\item[Precisión GPS]: Es determinante para la confiabilidad de los análisis. Valores menores a 10 metros se consideran excelentes, entre 10-30 metros buenos, y mayores a 50 metros requieren precaución interpretativa.
+	\item[Riqueza de movimiento]: Refleja la dinámica de la trayectoria. Valores altos sugieren patrones de movilidad complejos, mientras que valores bajos indican comportamientos mayormente estáticos.
+	\item[Diversidad espacial]: Resulta fundamental para estudios que requieren comprender la amplitud de los patrones de movilidad urbana. 
+\end{description}
+
+Para obtener una evaluación integral, se implementa un sistema de puntuación ponderada que normaliza y combina las seis métricas en una puntuación global (\textit{quality\_score}) entre 0 y 100. La fórmula para cada componente es la siguiente:
+\begin{itemize}
+	\item Volumen (25\%): min(100, records\_count / 5.0)
+	\item Duración (20\%): min(100, time\_span\_days / 0.3)
+	\item Regularidad (20\%): min(100, (active\_days\_count / time\_span\_days) * 100)
+	\item Precisión (15\%): max(0, 100 - avg\_accuracy\_meters)
+	\item Movilidad (10\%): min(100, movement\_points / 1.0)
+	\item Diversidad espacial (10\%): min(100, spatial\_range / 0.01 * 100)
+\end{itemize}
+
+Esta puntuación final se traduce a una categoría cualitativa según los siguiente umbrales:
+\begin{enumerate}
+	\item \textbf{EXCELENTE:} ($\geq$80)
+	\item \textbf{MUY BUENA:} ($\geq$65)
+	\item \textbf{BUENA:} ($\geq$50)
+	\item \textbf{REGULAR:} ($\geq$35)
+	\item \textbf{BAJA:} ($<$35)     
+\end{enumerate}
+
+\subsection{Clasificación de trayectorias en categorías cualitativas}
+La clasificación de trayectorias en categorías cualitativas se implementa mediante el script \ref{cod:pedestrian_trayectories}, que constituye el núcleo del \textbf{pipeline de procesamiento} del proyecto. Este script ejecuta un sistema integral de filtrado, clasificación de calidad y segmentación de trayectorias, diseñado para extraer del conjunto de datos anteriormente depurado un conjunto de \textbf{trayectorias peatonales validadas}.
+Para el filtrado y segmentación de movimiento peatonal para cada individuo seleccionado, el \textit{script} aplica un proceso de refinamiento específico:
 	\begin{itemize}
-		\item Media de velocidad peatonal: 1.34 m/s
-		\item Desviación estándar: 0.37 m/s
-		\item Rango aceptable: 0.6-2.08 m/s (media \(\pm\) desviaciones estándar)
+		\item \textbf{Cálculo de Velocidad:} Para cada par de puntos consecutivos, calcula la distancia real en metros mediante la \textbf{fórmula de \textit{Haversine}} y la divide por la diferencia de tiempo, obteniendo la velocidad instantánea en m/s.
+		\item \textbf{Aplicación del Filtro Peatonal:} Se descartan los puntos cuya velocidad no se encuentre dentro del \textbf{rango estadístico típico de caminata humana}. Los parámetros se basan en literatura científica: media de 1.34 m/s, desviación estándar de 0.37 m/s. El \textbf{umbral de aceptación se define como media $\pm 2\sigma$ (0.6 -- 2.08 m/s o 2.16 -- 7.49 km/h)}.
+		\item \textbf{Segmentación Temporal:} La trayectoria se \textbf{divide en segmentos continuos} de movimiento puramente peatonal. Si se detecta un punto con velocidad fuera del rango (ej., un viaje en auto), la trayectoria se segmenta, aislando así los períodos válidos de caminata.
+		\item \textbf{Agrupación Diaria:} El procesamiento se realiza \textbf{por fecha independiente}, preservando la coherencia temporal y facilitando análisis posteriores por día de actividad.
 	\end{itemize}
-	\item Segmentación de trayectorias para eliminar puntos fuera del rango peatonal
-	\item Mapa de distribución de puntos de recorrido por ciudad.
-	\item Visualización de trayectorias individuales completas.
-	\item Implementación de algoritmo de \textit{clustering} sobre puntos de velocidad peatonal.
+
+El \textit{script} produce tres archivos clave en el directorio \texttt{pedestrian\_analysis/}:
+
+\begin{enumerate}
+	\item \texttt{trajectory\_classification.csv}: Catálogo completo con las métricas de calidad, puntuación y categoría para cada \texttt{identifier}.
+	\item \texttt{pedestrian\_trajectories\_all.csv}: \textbf{Dataset principal del proyecto}. Contiene únicamente los puntos GPS validados como movimiento peatonal. Incluye las columnas críticas:
+	\begin{itemize}
+		\item \texttt{segment\_id}: Identificador único para cada tramo continuo de caminata.
+		\item \texttt{speed\_ms}: Velocidad calculada en metros/segundo.
+	\end{itemize}
+	\item \texttt{statistics\_per\_person.csv}: Estadísticas agregadas por individuo (número de segmentos, puntos totales, velocidad promedio, categoría de calidad).
+\end{enumerate}
+
+Este procesamiento es \textbf{fundamental} para garantizar la validez del modelo final. Los datos brutos de movilidad son heterogéneos: contienen desplazamientos en diversos modos de transporte (vehículo, bicicleta, transporte público) y períodos de inactividad. Para modelar \textbf{comportamiento peatonal específicamente}, es imperativo:
+
+\begin{itemize}
+	\item \textbf{Asegurar la calidad de los datos fuente}, descartando trayectorias escasas, irregulares o imprecisas.
+	\item \textbf{Aislar el modo de transporte "caminata"}, filtrando puntos cuya velocidad sea incoherente con el movimiento a pie.
+	\item \textbf{Manejar la multimodalidad}, segmentando las trayectorias para separar los períodos de caminata de otros modos de transporte dentro de un mismo día de un individuo.
 \end{itemize}
 
+Se anticipa una \textbf{reducción significativa pero enfocada} del volumen de datos:
+\begin{itemize}
+	\item De $\sim$6 millones de individuos originales, se espera retener \textbf{decenas de miles} con calidad suficiente ($\geq$35 puntos).
+	\item De $\sim$51 millones de registros GPS, se proyecta extraer \textbf{entre 5 y 10 millones} de puntos correspondientes a movimiento peatonal validado.
+\end{itemize}
+
+El resultado final será un \textbf{dataset compacto, de alta calidad y consistente}, compuesto exclusivamente por trayectorias con cobertura suficiente y patrones de velocidad inherentes al desplazamiento peatonal, organizado en segmentos que representan fielmente períodos de caminata. Esta es la base de datos esencial para entrenar modelos de movilidad peatonal realistas.
+
+%\subsection{Inspección de valores únicos y estructura general}
+%Análisis pendiente
+
+% --------------------------
+% DETERMINACIÓN DE PUNTOS DE RECORRIDO
+% --------------------------
+\section{Determinación de puntos de recorrido}
+\subsection{Distribución temporal y frecuencia}
+
+El análisis de la distribución temporal y frecuencia de aparición de los individuos en el dataset es fundamental para identificar patrones de rutina y segmentar a los usuarios según su persistencia temporal. Este análisis se realiza mediante el \textit{script} \ref{cod:routine_individuals}, complementado con los resultados previos de \ref{cod:identifier_histogram_daily}.
+
+El \textit{script} implementa un análisis exhaustivo multi-día que procesa el conjunto de datos en \textbf{chunks} para optimizar el uso de memoria. El proceso sigue estos pasos:
+
+\begin{enumerate}
+	\item \textbf{Extracción de fechas}: Para cada registro, se extrae la fecha del campo \texttt{timestamp}.
+	\item \textbf{Agrupación por individuo y día}: Los registros se agrupan por \texttt{identifier} y fecha, manteniendo un conjunto (\texttt{set}) de fechas únicas para cada persona.
+	\item \textbf{Cálculo de estadísticas}: Para cada individuo se calcula:
+	\begin{itemize}
+		\item Número de días diferentes con registros
+		\item Primera y última fecha de registro
+		\item Intervalo temporal (diferencia entre última y primera fecha)
+	\end{itemize}
+	\item \textbf{Agregación global}: Se generan estadísticas agregadas:
+	\begin{itemize}
+		\item Número total de identificadores únicos
+		\item Cantidad de individuos que aparecen en un solo día vs. múltiples días
+		\item Número máximo de días registrados por un individuo
+		\item Promedio de días para individuos multi-día
+		\item Distribución completa: cuántos individuos aparecen en 1 día, 2 días, 3 días, etc.
+	\end{itemize}
+\end{enumerate}
+
+El análisis produce dos tipos principales de resultados:
+
+\begin{itemize}
+	\item \textbf{Histograma de distribución}: Se genera un histograma con escala logarítmica en el eje Y para visualizar la distribución del número de días por individuo. Esta escala es necesaria dada la naturaleza típicamente sesgada de los datos, donde hay muchos individuos con 1-2 días y muy pocos con 7+ días.
+	
+	\item \textbf{Archivo CSV detallado}: Se guarda el archivo \texttt{multi\_day\_summary.csv} con los siguientes campos por individuo:
+	\begin{itemize}
+		\item \texttt{identifier}: Identificador único
+		\item \texttt{days\_count}: Número de días con registros
+		\item \texttt{first\_date}: Primera fecha de registro
+		\item \texttt{last\_date}: Última fecha de registro
+		\item \texttt{time\_span\_days}: Diferencia en días entre primera y última fecha
+	\end{itemize}
+\end{itemize}
+
+Los resultados de \texttt{routine\_individuals.py} se complementan con el análisis previo realizado por \texttt{identifier\_histograms\_daily.py}, el cual proporciona una perspectiva inversa:
+
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{@{}cc@{}}
+		\toprule
+		Análisis                         & \begin{tabular}[c]{@{}c@{}}Perspectiva \\ proporcionada\end{tabular}                                                                                                            \\ \midrule
+		routine\_individuals.py          & \begin{tabular}[c]{@{}c@{}}\textbf{Vista por individuo:} Cuántos días\\ tiene registros cada persona, permitiendo\\ identificar su persistencia temporal.\end{tabular}          \\
+		identifier\_histograms\_daily.py & \begin{tabular}[c]{@{}c@{}}\textbf{Vista por día:} Cuántos individuos aparecen en\\ cada día específico, revelando patrones\\ de actividad diaria en la población,\end{tabular} \\ \bottomrule
+	\end{tabular}
+\end{figure}
+
+La persistencia temporal es un factor crítico para identificar rutinas y segmentar a los usuarios según sus patrones de movilidad:
+\begin{itemize}
+	\item \textbf{Usuarios ocasionales (1-2 días)}: Probablemente corresponden a turistas, visitantes ocasionales o registros aislados sin valor para modelar patrones habituales de movilidad.
+	
+	\item \textbf{Usuarios regulares (3-6 días)}: Indican cierta consistencia en los registros, posiblemente correspondiendo a personas que realizan desplazamientos recurrentes pero no diarios.
+	
+	\item \textbf{Usuarios rutinarios (7+ días)}: Constituyen el grupo más valioso para el análisis, ya que su presencia continua sugiere rutinas establecidas (ej., desplazamientos casa-trabajo-casa) que son fundamentales para modelar movilidad típica.
+\end{itemize}
+
+Basado en la naturaleza de los datos de movilidad, se anticipan los siguientes patrones:
+
+\begin{enumerate}
+	\item \textbf{Distribución sesgada}: Se espera que la gran mayoría de individuos ($>80\%$) aparezca en solo 1-2 días, siguiendo una distribución de ley de potencias típica en datos de movilidad.
+	
+	\item \textbf{Segmentación natural}:
+	\begin{itemize}
+		\item $\sim 80-90\%$: Usuarios ocasionales (1-2 días)
+		\item $\sim 10-15\%$: Usuarios regulares (3-6 días)
+		\item $\sim 1-5\%$: Usuarios rutinarios (7+ días)
+	\end{itemize}
+	
+	\item \textbf{Patrones temporales}: Los días de mayor actividad probablemente serán días laborables (lunes a viernes), con menor actividad durante fines de semana y días festivos.
+	
+	\item \textbf{Usuarios ideales para análisis}: Los individuos con mayor número de días de cobertura (usuarios rutinarios) constituyen los candidatos óptimos para el análisis de patrones recurrentes de movilidad y la identificación de rutinas establecidas.
+\end{enumerate}
+
+Este análisis temporal permite:
+
+\begin{itemize}
+	\item \textbf{Filtrar individuos} para análisis posteriores, seleccionando aquellos con suficiente persistencia temporal para modelar rutinas.
+	
+	\item \textbf{Entender la representatividad} de los datos: determinar si el dataset contiene suficientes usuarios rutinarios para un análisis significativo de patrones de movilidad.
+	
+	\item \textbf{Segmentar la población} según sus patrones de uso, lo que puede informar diferentes estrategias de modelado para cada grupo.
+	
+	\item \textbf{Identificar sesgos temporales} en la recolección de datos, como días con cobertura incompleta o períodos con baja actividad.
+\end{itemize}
+
+La combinación de estos análisis proporciona una comprensión completa de la dimensión temporal del dataset, identificando tanto la frecuencia de aparición de individuos como la distribución de actividad a lo largo del tiempo, ambos elementos esenciales para la construcción de modelos de movilidad robustos y representativos.
+
+
+\subsection{Cálculo de velocidades}
+El cálculo de velocidades entre puntos consecutivos de las trayectorias es una etapa crítica en el análisis de movilidad, ya que permite validar la coherencia de los datos, identificar el modo de transporte predominante y caracterizar los patrones de desplazamiento de los individuos. Esta sección utiliza dos \textit{scripts} complementarios que operan sobre la base de datos PostgreSQL previamente creada. La velocidad instantánea se calcula entre cada par de puntos GPS consecutivos para un mismo individuo, siguiendo un procedimiento riguroso:
+
+\begin{enumerate}
+	\item \textbf{Ordenamiento cronológico}: Los registros de cada individuo se ordenan por \texttt{timestamp}.
+	
+	\item \textbf{Cálculo de distancia}: Se emplea la \textbf{fórmula de Haversine} para calcular la distancia real en metros entre puntos consecutivos, considerando la curvatura terrestre:
+	
+	\begin{equation}
+		d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\lambda}{2}\right)}\right)
+	\end{equation}
+	
+	donde $R = 6,371,000$ m es el radio terrestre, $\phi$ es la latitud en radianes, y $\lambda$ es la longitud en radianes.
+	
+	\item \textbf{Cálculo del intervalo temporal}: Se calcula la diferencia de tiempo en segundos entre registros consecutivos.
+	
+	\item \textbf{Cálculo de velocidad}: La velocidad instantánea en m/s se obtiene como:
+	
+	\begin{equation}
+		v = \frac{d}{\Delta t}
+	\end{equation}
+	
+	\item \textbf{Filtrado de valores extremos}: Se aplican filtros de calidad:
+	\begin{itemize}
+		\item Tiempo mínimo: $\Delta t > 1$ segundo (para evitar divisiones por cero y mediciones irreales)
+		\item Rango de velocidad: $0.1$ km/h $< v < 200$ km/h (para descartar valores erróneos)
+	\end{itemize}
+\end{enumerate}
+
+\paragraph{Speed\_histogram.py: Análisis poblacional}
+Este \textit{script} realiza un análisis agregado de velocidades para los individuos de mayor calidad:
+
+\begin{itemize}
+	\item \textbf{Selección de individuos}: Conecta a PostgreSQL y consulta la tabla \texttt{human\_trajectories} para obtener los \textbf{top 50 individuos por ranking de calidad}.
+	
+	\item \textbf{Extracción de datos}: Para estos individuos, extrae todos sus registros GPS del período \textbf{6-15 de noviembre de 2022} con precisión GPS $<100$ metros.
+	
+	\item \textbf{Cálculo agregado}: Calcula velocidades para todos los pares de puntos consecutivos y las agrega en un conjunto de datos unificado.
+	
+	\item \textbf{Clasificación por modo de transporte}: Clasifica las velocidades en rangos estándar:
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{@{}ccc@{}}
+			\toprule
+			\textbf{Modo de transporte} & \textbf{Rango (km/h)} & \textbf{Rango (m/s)} \\ \midrule
+			Peatonal                    & 1-10                  & 0.28-2.78            \\
+			Bicicleta                   & 11-20                 & 3.06-5.56            \\
+			Automóvil                   & 21-150                & 5.83-41.67           \\
+			Avión                       & \textgreater 151      & \textgreater 41.94   \\ \bottomrule
+		\end{tabular}
+		\caption{Clasificación de velocidades por modo de transporte}
+		\label{tab:clasificacion_velocidades}
+	\end{table}
+	
+	\item \textbf{Visualización}: Genera un histograma de distribución de velocidades con:
+	\begin{itemize}
+		\item Bins óptimos calculados como $\sqrt{n}$ (método de Scott)
+		\item Líneas verticales marcando los rangos de modos de transporte
+		\item Anotaciones con estadísticas: media, mediana, desviación estándar
+		\item Escala logarítmica en el eje Y para mejor visualización
+	\end{itemize}
+	
+	\item \textbf{Salida de datos}: Guarda tres archivos:
+	\begin{enumerate}
+		\item Histograma en formato PNG
+		\item Conjunto de datos de velocidades en \texttt{datos\_velocidades\_noviembre.csv}
+		\item Conjunto de datos de movilidad original en \texttt{datos\_movilidad\_noviembre.csv}
+	\end{enumerate}
+\end{itemize}
+
+\paragraph{Speed\_vector.py: Análisis individual detallado}
+Este \textit{script} complementario permite análisis individualizados:
+
+\begin{itemize}
+	\item \textbf{Selección individual}: Permite al usuario seleccionar un individuo específico de los top 50.
+	
+	\item \textbf{Extracción de datos}: Consulta la tabla \texttt{analysis\_results.individual\_speeds} (calculada previamente o en tiempo real).
+	
+	\item \textbf{Vector de velocidades}: Genera un \textbf{vector de velocidades} (array de todas las velocidades calculadas para ese individuo).
+	
+	\item \textbf{Estadísticas detalladas}: Calcula:
+	\begin{itemize}
+		\item Media y mediana de velocidades
+		\item Desviación estándar
+		\item Cuartiles 25\% y 75\%
+		\item Rango intercuartílico
+		\item Máximos y mínimos
+	\end{itemize}
+	
+	\item \textbf{Visualizaciones duales}: Crea dos gráficos complementarios:
+	\begin{enumerate}
+		\item \textbf{Histograma individual}: Distribución de velocidades con líneas para media y mediana
+		\item \textbf{Serie temporal}: Evolución de la velocidad a lo largo del tiempo
+	\end{enumerate}
+	
+	\item \textbf{Salida de datos}: Guarda:
+	\begin{itemize}
+		\item Vector de velocidades en \texttt{vector\_velocidades\_\{id\}.csv}
+		\item Estadísticas en \texttt{estadisticas\_\{id\}.csv}
+		\item Gráficos en formato PNG
+	\end{itemize}
+\end{itemize}
+
+El cálculo de velocidades es esencial por múltiples razones técnicas y analíticas:
+
+\begin{enumerate}
+	\item \textbf{Validación de calidad de datos}: Las velocidades imposibles o extremas (ej., $>500$ km/h en un segundo) indican errores de medición GPS que deben identificarse y descartarse para mantener la integridad del conjunto de datos.
+	
+	\item \textbf{Identificación del modo de transporte}: La velocidad es el principal discriminante entre modos de transporte. Mientras que las coordenadas GPS por sí solas no pueden distinguir entre caminata y movimiento vehicular, los perfiles de velocidad son característicos para cada modo:
+	\begin{itemize}
+		\item Caminata: $1-6$ km/h, variaciones suaves
+		\item Bicicleta: $10-25$ km/h, más consistente
+		\item Automóvil: $20-120$ km/h, con variaciones abruptas
+	\end{itemize}
+	
+	\item \textbf{Caracterización de patrones individuales}: Las estadísticas de velocidad por individuo permiten:
+	\begin{itemize}
+		\item Identificar usuarios predominantemente peatonales (velocidades consistentemente $<5$ km/h)
+		\item Detectar usuarios con patrones mixtos (rangos variables de $5-50$ km/h)
+		\item Caracterizar usuarios predominantemente motorizados (velocidades frecuentemente $>30$ km/h)
+	\end{itemize}
+\end{enumerate}
+
+Basado en principios de física de movilidad urbana y estadísticas de transporte, se anticipan los siguientes patrones:
+
+\begin{enumerate}
+	\item \textbf{Distribución multimodal}: El histograma general de velocidades debería mostrar múltiples picos correspondientes a los principales modos de transporte:
+	\begin{itemize}
+		\item \textbf{Pico peatonal pronunciado}: $3-6$ km/h ($0.8-1.7$ m/s), correspondiente a velocidad típica de caminata humana.
+		\item \textbf{Pico de bicicleta/tráfico lento}: $15-25$ km/h ($4.2-6.9$ m/s), incluyendo ciclistas y vehículos en congestión.
+		\item \textbf{Pico de automóvil}: $40-80$ km/h ($11.1-22.2$ m/s), correspondiente a vehículos en vías rápidas.
+	\end{itemize}
+	
+	\item \textbf{Frecuencia relativa}: Se espera que las velocidades peatonales sean las más frecuentes (mayor área bajo la curva en ese rango), seguida por velocidades vehiculares, con velocidades extremas ($>150$ km/h) siendo muy raras.
+	
+	\item \textbf{Estadísticas poblacionales}:
+	\begin{itemize}
+		\item Media general: $10-20$ km/h ($2.8-5.6$ m/s), reflejando la mezcla de modos de transporte.
+		\item Mediana: Posiblemente menor que la media ($6-12$ km/h), debido a la asimetría de la distribución.
+		\item Desviación estándar: Alta ($8-15$ km/h), indicando gran variabilidad entre individuos y modos.
+	\end{itemize}
+	
+	\item \textbf{Heterogeneidad individual}: Los análisis por individuo deberían revelar:
+	\begin{itemize}
+		\item Individuos \textbf{exclusivamente peatonales}: Distribución unimodal centrada en $3-6$ km/h.
+		\item Individuos con \textbf{uso mixto}: Distribuciones bimodales o multimodales.
+		\item Individuos \textbf{predominantemente motorizados}: Distribuciones sesgadas hacia altas velocidades.
+	\end{itemize}
+\end{enumerate}
+
+Los resultados del análisis de velocidades tienen importantes implicaciones para el desarrollo de modelos de movilidad:
+
+\begin{enumerate}
+	\item \textbf{Segmentación de usuarios}: Permite clasificar automáticamente a los individuos según su modo de transporte predominante, lo que habilita modelos específicos para cada grupo.
+	
+	\item \textbf{Validación de trayectorias}: Proporciona un mecanismo para identificar y filtrar trayectorias erróneas o no representativas.
+	
+	\item \textbf{Estimación de tiempos de viaje}: Las velocidades calculadas permiten estimar tiempos realistas de desplazamiento entre puntos.
+	
+	\item \textbf{Calibración de parámetros}: Los estadísticos de velocidad sirven como parámetros de entrada para modelos de simulación de movilidad.
+	
+	\item \textbf{Identificación de anomalías}: Permite detectar comportamientos atípicos (ej., velocidades inconsistentes con el entorno urbano).
+\end{enumerate}
+
+La combinación del análisis poblacional (speed\_histogram.py) y el análisis individual detallado (speed\_vector.py) proporciona una comprensión completa de las dinámicas de velocidad en el dataset, identificando tanto patrones agregados como variabilidad individual, ambos esenciales para construir modelos de movilidad robustos y representativos.
+
+\subsection{Aplicación de filtro peatonal}
+La identificación y aislamiento de movimiento puramente peatonal es fundamental para el objetivo específico de modelar movilidad a pie. Esta funcionalidad está implementada dentro del \textit{script} \texttt{pedestrian\_trajectories.py} (descrito en la sección 4.2.6), específicamente en los métodos \texttt{calculate\_speeds\_for\_trajectory()} y \texttt{segment\_trajectory\_by\_speed()}.
+
+\subsubsection{Parámetros biomecánicos del filtro}
+
+El filtro peatonal se basa en parámetros estadísticos derivados de estudios de biomecánica humana y análisis de velocidad peatonal:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{@{}ccc@{}}
+		\toprule
+		\textbf{Párametro}       & \textbf{Valor en m/s} & \textbf{Valor en km/h} \\ \midrule
+		Velocidad media peatonal & 1.34                  & 4.82                   \\
+		Desviación estándar      & 0.37                  & 1.33                   \\
+		Límite inferior (media - $2\sigma$)         & 0.6                   & 2.16                   \\
+		Límite superior (media + $2\sigma$)         & 2.08                  & 7.49                   \\
+		Rango aceptable completo & 0.60-2.08             & 2.16-7.49              \\ \bottomrule
+	\end{tabular}
+	\caption{Parámetros estadísticos del filtro peatonal}
+	\label{tab:parametros_peatonal}
+\end{table}
+
+Estos parámetros fueron seleccionados para cubrir el espectro completo de velocidades de caminata humana:
+
+\begin{itemize}
+	\item \textbf{Límite inferior (0.6 m/s)}: Incluye caminata muy lenta, característica de niños pequeños, adultos mayores, personas con movilidad reducida, o individuos caminando en multitudes densas.
+	
+	\item \textbf{Velocidad media (1.34 m/s)}: Corresponde a la velocidad típica de marcha normal para adultos saludables en condiciones urbanas estándar.
+	
+	\item \textbf{Límite superior (2.08 m/s)}: Captura caminata rápida, como personas apuradas, deportistas, o individuos caminando sin obstáculos.
+\end{itemize}
+
+El uso de $\pm 2$ desviaciones estándar alrededor de la media asegura que el filtro capture aproximadamente el 95\% de la variabilidad natural de la velocidad peatonal en condiciones normales, siguiendo el principio estadístico de la distribución normal. El proceso de filtrado peatonal sigue una lógica secuencial rigurosa:
+
+\begin{enumerate}
+	\item \textbf{Cálculo de velocidades}: Para cada trayectoria individual, se calculan las velocidades instantáneas entre todos los puntos consecutivos usando la fórmula de Haversine (descrita en la sección anterior).
+	
+	\item \textbf{Clasificación binaria}: Cada punto (excepto el primero) se clasifica como:
+	\begin{itemize}
+		\item \textbf{Válido}: Si la velocidad calculada al llegar a ese punto está dentro del rango peatonal $(0.6 \leq v \leq 2.08$ m/s$)$.
+		\item \textbf{Inválido}: Si la velocidad está fuera del rango peatonal.
+	\end{itemize}
+	
+	\item \textbf{Detección de rupturas}: Se identifican transiciones entre modos de transporte cuando:
+	\begin{itemize}
+		\item Un punto válido es seguido por un punto inválido (inicio de segmento motorizado).
+		\item Un punto inválido es seguido por un punto válido (inicio de segmento peatonal).
+	\end{itemize}
+	
+	\item \textbf{Segmentación}: La trayectoria completa se divide en múltiples segmentos basados en estas rupturas, creando fragmentos continuos donde todos los puntos son válidos (segmentos peatonales) o inválidos (segmentos no peatonales).
+	
+	\item \textbf{Filtrado final}: Se aplican criterios de calidad:
+	\begin{itemize}
+		\item Solo se conservan segmentos peatonales.
+		\item Se descartan segmentos con menos de 2 puntos (un solo punto no puede formar una trayectoria).
+		\item Se eliminan completamente segmentos donde todas las velocidades están fuera del rango peatonal.
+	\end{itemize}
+\end{enumerate}
+
+La implementación de este filtro específico se justifica por múltiples razones técnicas y analíticas:
+
+\begin{enumerate}
+	\item \textbf{Especificidad del modelo}: El objetivo del proyecto es modelar específicamente \textbf{movilidad peatonal}, no desplazamientos multimodales generales. Incluir segmentos de otros modos de transporte introduciría patrones cinemáticos incompatibles que degradarían la calidad del modelo.
+	
+	\item \textbf{Robustez estadística}: El filtro por velocidad es más robusto que alternativas como:
+	\begin{itemize}
+		\item Filtrado por distancia fija: No considera diferencias temporales.
+		\item Filtrado por tiempo fijo: No considera diferencias espaciales.
+		\item Filtrado por aceleración: Más complejo y propenso a ruido en datos GPS.
+	\end{itemize}
+	
+	\item \textbf{Habilidad para manejar multimodalidad}: Muchos individuos utilizan múltiples modos de transporte en un mismo día (ej., caminar a la estación, tomar metro, caminar a la oficina). El algoritmo identifica y aísla automáticamente solo las fases peatonales.
+\end{enumerate}
+
+Basado en estudios de movilidad urbana y patrones de desplazamiento, se anticipan los siguientes resultados:
+
+\begin{enumerate}
+	\item \textbf{Reducción de volumen de datos}: Se espera que el filtro elimine entre el \textbf{60-80\%} de los puntos GPS originales de cada individuo, reflejando que:
+	\begin{itemize}
+		\item La mayoría de las personas usan transporte motorizado para trayectos largos.
+		\item Los períodos de inactividad (en casa, en la oficina) generan puntos estáticos no peatonales.
+		\item Muchos desplazamientos cortos también pueden realizarse en vehículos.
+	\end{itemize}
+	
+	\item \textbf{Calidad de segmentos resultantes}: Los segmentos peatonales identificados deberían exhibir:
+	\begin{itemize}
+		\item \textbf{Coherencia espacial}: Rutas continuas sin saltos geográficos bruscos.
+		\item \textbf{Consistencia de velocidad}: Variaciones suaves dentro del rango peatonal, sin cambios abruptos.
+		\item \textbf{Sentido físico}: Representar viajes a pie plausibles (ej., "casa → estación de metro", "oficina → restaurante", "parque de estacionamiento → centro comercial").
+	\end{itemize}
+	
+	\item \textbf{Distribución por individuo}: El número de segmentos peatonales por persona debería correlacionar positivamente con:
+	\begin{itemize}
+		\item Número de días con datos (mayor cobertura temporal → más segmentos).
+		\item Nivel de actividad general del individuo.
+		\item Hábitos de movilidad (personas que caminan más vs. personas que conducen más).
+	\end{itemize}
+	
+	\item \textbf{Patrones temporales}: Se espera que los segmentos peatonales se concentren en:
+	\begin{itemize}
+		\item Horas pico de desplazamientos (mañana y tarde).
+		\item Trayectos de conexión entre modos de transporte.
+		\item Actividades recreativas (caminatas en parques, centros comerciales).
+	\end{itemize}
+\end{enumerate}
+
+Para asegurar la calidad del filtrado, se implementan múltiples mecanismos de validación:
+
+\begin{enumerate}
+	\item \textbf{Verificación estadística}: Análisis posterior de las velocidades en segmentos etiquetados como peatonales para confirmar que se mantienen dentro del rango esperado.
+	
+	\item \textbf{Consistencia temporal}: Verificación de que los segmentos tienen duraciones plausibles para caminata (generalmente 1-30 minutos para desplazamientos urbanos típicos).
+	
+	\item \textbf{Coherencia espacial}: Análisis de la densidad de puntos en segmentos peatonales para detectar posibles errores de segmentación.
+	
+	\item \textbf{Comparación con patrones conocidos}: Contraste de los segmentos identificados con patrones típicos de viajes peatonales documentados en literatura de movilidad urbana.
+\end{enumerate}
+
+El filtrado peatonal tiene importantes implicaciones para las etapas posteriores del proyecto:
+
+\begin{enumerate}
+	\item \textbf{Calidad del conjunto de datos}: Crea un conjunto de datos especializado de alta calidad para entrenamiento de modelos específicos de movilidad peatonal.
+	
+	\item \textbf{Reducción de complejidad}: Elimina la heterogeneidad de modos de transporte, simplificando el análisis de patrones.
+	
+	\item \textbf{Enfoque analítico}: Permite concentrar el análisis en las características específicas de la caminata (velocidad, patrones de pausa, preferencias de ruta).
+	
+	\item \textbf{Validez de conclusiones}: Asegura que las conclusiones sobre patrones de movilidad se refieran específicamente a comportamiento peatonal, no a mezclas indeterminadas de modos.
+	
+	\item \textbf{Comparabilidad}: Facilita la comparación con estudios previos específicos de movilidad peatonal.
+\end{enumerate}
+
+La implementación de este filtro basado en parámetros biomecánicos robustos asegura que el análisis posterior se centre exclusivamente en movilidad peatonal válida, proporcionando una base sólida para el desarrollo de modelos precisos y representativos de comportamiento a pie en entornos urbanos.
+
+\subsection{Visualización geográfica}
+La visualización geográfica es una etapa crítica en el análisis de datos de movilidad, ya que permite transformar coordenadas numéricas abstractas en representaciones espaciales intuitivas que facilitan la validación, exploración y comprensión de patrones de movilidad. Esta sección emplea tres \textit{scripts} complementarios que generan visualizaciones interactivas y estáticas de diferentes niveles de agregación.
+
+\subsubsection{Show\_coordinates.py: Visualización individual interactiva}
+
+Este script genera mapas interactivos individuales utilizando la biblioteca \texttt{Folium}, permitiendo una exploración detallada de las trayectorias de usuarios específicos:
+
+\begin{enumerate}
+	\item \textbf{Selección de individuo}: Conecta a la base de datos PostgreSQL y permite al usuario seleccionar un \texttt{identifier} específico para análisis detallado.
+	
+	\item \textbf{Extracción temporal}: Recupera todas las coordenadas GPS del individuo para el período del \textbf{6 al 15 de noviembre de 2022}, un intervalo temporal significativo que captura patrones semanales.
+	
+	\item \textbf{Codificación temporal por color}: Asigna un color distintivo a cada día según el esquema:
+	
+	\item \textbf{Construcción del mapa}:
+	\begin{itemize}
+		\item Crea un mapa centrado automáticamente en el área de actividad del individuo.
+		\item Dibuja una \textbf{polilínea} conectando todos los puntos en orden cronológico, visualizando la trayectoria completa.
+		\item Agrega marcadores en cada punto GPS con \textit{popups} interactivos que muestran:
+		\begin{itemize}
+			\item Coordenadas exactas (latitud, longitud)
+			\item \textit{Timestamp} completo
+			\item Día de la semana y fecha
+			\item Velocidad calculada (si está disponible)
+		\end{itemize}
+	\end{itemize}
+	
+	\item \textbf{Capas adicionales}: Para trayectorias con más de 10 puntos, agrega una capa de \textbf{mapa de calor (heatmap)} superpuesta que visualiza la densidad espacial de la actividad.
+	
+	\item \textbf{Leyenda temporal}: Incluye una leyenda interactiva en la esquina superior derecha que muestra el código de colores por día, facilitando la interpretación de patrones temporales.
+	
+	\item \textbf{Salida}: Guarda el mapa como archivo HTML interactivo en la carpeta \texttt{maps/}, permitiendo su visualización en cualquier navegador web.
+\end{enumerate}
+
+\subsubsection{City\_distribution\_map.py: Visualización agregada multi-usuario}
+
+Este script crea una visualización agregada que muestra múltiples usuarios simultáneamente, revelando patrones poblacionales:
+
+\begin{enumerate}
+	\item \textbf{Carga de datos}: Carga el dataset \texttt{pedestrian\_trajectories\_all.csv} que contiene todos los segmentos peatonales filtrados y validados.
+	
+	\item \textbf{Asignación de colores}: Identifica todos los usuarios únicos y asigna un color distintivo a cada uno (hasta 20 usuarios para evitar saturación visual).
+	
+	\item \textbf{Construcción del mapa base}: Crea un mapa centrado en el centroide geográfico de todos los puntos, asegurando que toda el área de actividad sea visible.
+	
+	\item \textbf{Visualización por usuario}:
+	\begin{itemize}
+		\item Para cada usuario, dibuja todos sus puntos como \textbf{círculos pequeños} con el color asignado.
+		\item Conecta los puntos de cada segmento peatonal con \textbf{polilíneas} del mismo color.
+		\item Esto mantiene la identidad individual mientras muestra trayectorias completas.
+	\end{itemize}
+	
+	\item \textbf{Optimización de rendimiento}: Implementa un \textbf{MarkerCluster} que agrupa automáticamente puntos cercanos en áreas densas, mejorando el rendimiento de visualización sin perder información.
+	
+	\item \textbf{Control de capas}: Crea capas (\texttt{FeatureGroups}) separadas para cada usuario y agrega un control de capas interactivo que permite mostrar u ocultar usuarios individualmente, facilitando el análisis comparativo.
+	
+	\item \textbf{Salida}: Guarda el resultado como \texttt{mapa\_ciudades\_trayectorias.html}, un mapa interactivo completo para exploración poblacional.
+\end{enumerate}
+
+\subsubsection{Graph.py: Visualizaciones estáticas multi-propósito}
+
+Este script genera un conjunto completo de visualizaciones estáticas utilizando \texttt{Matplotlib} y \texttt{Seaborn}, enfocándose en diferentes dimensiones analíticas:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{@{}ccc@{}}
+		\toprule
+		\textbf{Visualización}                                               & \textbf{Tipo de gráfico}                                                 & \textbf{Insights proporcionados}                                                                                                                            \\ \midrule
+		\begin{tabular}[c]{@{}c@{}}Trayectorias \\ individuales\end{tabular} & \begin{tabular}[c]{@{}c@{}}Scatter plot con\\ líneas\end{tabular}        & \begin{tabular}[c]{@{}c@{}}Patrones de rutas individuales, consistencia\\ de desplazamientos, identificación de puntos\\ fijos (hogar/trabajo)\end{tabular} \\
+		\begin{tabular}[c]{@{}c@{}}Densidad\\ temporal\end{tabular}          & \begin{tabular}[c]{@{}c@{}}Scatter plot con\\ color-map\end{tabular}     & \begin{tabular}[c]{@{}c@{}}Patrones horarios de actividad, concentración\\ de movimientos por hora del día\end{tabular}                                     \\
+		\begin{tabular}[c]{@{}c@{}}Actividad \\ por hora\end{tabular}        & Histograma de barras                                                     & \begin{tabular}[c]{@{}c@{}}Picos de actividad horaria, identificación de\\ horas pico de movilidad\end{tabular}                                             \\
+		\begin{tabular}[c]{@{}c@{}}Actividad\\ por día\end{tabular}          & \begin{tabular}[c]{@{}c@{}}Histograma\\ comparativo\end{tabular}         & \begin{tabular}[c]{@{}c@{}}Diferencias de actividad entre días laborales\\ y fines de semana, patrones semanales\end{tabular}                               \\
+		\begin{tabular}[c]{@{}c@{}}Distribución de\\ velocidad\end{tabular}  & \begin{tabular}[c]{@{}c@{}}Histograma \\ de densidad\end{tabular}        & \begin{tabular}[c]{@{}c@{}}Validación del filtro peatonal, distribución\\ típica de velocidades de caminata\end{tabular}                                    \\
+		\begin{tabular}[c]{@{}c@{}}Usuarios más\\ activos\end{tabular}       & \begin{tabular}[c]{@{}c@{}}Gráfico de barras\\ horizontales\end{tabular} & \begin{tabular}[c]{@{}c@{}}Identificación de individuos con mayor\\ cobertura para análisis detallado\end{tabular}                                          \\ \bottomrule
+	\end{tabular}
+	\caption{Tipos de visualizaciones estáticas generadas}
+	\label{tab:visualizaciones_estaticas}
+\end{table}
+
+La inversión en desarrollo de capacidades de visualización se justifica por múltiples razones críticas:
+
+\begin{enumerate}
+	\item \textbf{Validación de calidad de datos}: Los mapas permiten identificar rápidamente anomalías que serían difíciles de detectar en análisis tabular:
+	\begin{itemize}
+		\item Puntos GPS erróneos (ej., coordenadas en medio del océano o fuera del área de estudio).
+		\item Trayectorias físicamente imposibles (saltos espaciales bruscos que indican errores de medición).
+		\item Problemas de segmentación (rupturas incorrectas en trayectorias continuas).
+	\end{itemize}
+	
+	\item \textbf{Detección de patrones espaciales}: Las visualizaciones revelan insights sobre:
+	\begin{itemize}
+		\item Áreas de alta concentración (nodos de actividad).
+		\item Rutas comunes y preferencias de trayectoria.
+		\item Relaciones espaciales entre puntos de origen y destino.
+		\item Distribución geográfica de la población estudiada.
+	\end{itemize}
+	
+	\item \textbf{Exploración interactiva}: Los mapas HTML permiten a los investigadores:
+	\begin{itemize}
+		\item Hacer zoom en áreas de interés específico.
+		\item Examinar puntos individuales con información detallada.
+		\item Comparar visualmente múltiples usuarios o períodos temporales.
+		\item Identificar correlaciones espaciales con características urbanas.
+	\end{itemize}
+	
+	\item \textbf{Comunicación de resultados}: Las visualizaciones estáticas proporcionan un medio efectivo para comunicar hallazgos en presentaciones, publicaciones y reportes técnicos.
+\end{enumerate}
+
+Basado en principios de movilidad urbana y análisis espacial, se anticipan los siguientes patrones en las visualizaciones:
+
+\begin{enumerate}
+	\item \textbf{Mapas individuales}:
+	\begin{itemize}
+		\item \textbf{Clusters espaciales}: Concentraciones de puntos en ubicaciones fijas que probablemente corresponden a hogar, lugar de trabajo, u otros puntos de interés frecuentados.
+		\item \textbf{Trayectorias lineales}: Rutas claras de desplazamiento entre clusters, siguiendo generalmente la red vial urbana.
+		\item \textbf{Consistencia temporal}: Uso repetido de las mismas rutas en diferentes días (indicado por superposición de colores).
+		\item \textbf{Variabilidad}: Diferencias entre días laborables y fines de semana en términos de destinos y horarios.
+	\end{itemize}
+	
+	\item \textbf{Mapa agregado poblacional}:
+	\begin{itemize}
+		\item \textbf{Cobertura geográfica}: Distribución concentrada en áreas urbanas con densidad poblacional.
+		\item \textbf{Corredores de movilidad}: Líneas visibles siguiendo avenidas principales y rutas de transporte.
+		\item \textbf{Nodos de actividad}: Puntos de alta densidad correspondientes a centros comerciales, estaciones de transporte, zonas de empleo.
+	\end{itemize}
+	
+	\item \textbf{Visualizaciones temporales}:
+	\begin{itemize}
+		\item \textbf{Patrones horarios}: Picos de actividad en horas típicas de desplazamiento (7-9 AM para viajes al trabajo, 5-7 PM para retorno).
+		\item \textbf{Variación semanal}: Mayor actividad en días laborables (lunes a viernes) comparado con fines de semana.
+		\item \textbf{Distribución de velocidades}: Concentración en el rango peatonal (1-6 km/h) con distribución aproximadamente normal, confirmando la efectividad del filtrado.
+	\end{itemize}
+	
+	\item \textbf{Gráficos de actividad}:
+	\begin{itemize}
+		\item \textbf{Distribución de usuarios}: Pocos usuarios con mucha actividad (cola larga en la distribución).
+		\item \textbf{Correlaciones}: Relación positiva entre número de días con datos y número de segmentos peatonales identificados.
+	\end{itemize}
+\end{enumerate}
+
+Las capacidades de visualización desarrolladas tienen importantes implicaciones para el análisis posterior:
+
+\begin{enumerate}
+	\item \textbf{Validación iterativa}: Permiten verificar resultados de cada etapa del pipeline de procesamiento, facilitando correcciones tempranas.
+	
+	\item \textbf{Hipótesis generación}: Los patrones visuales observados pueden sugerir nuevas hipótesis sobre comportamiento de movilidad.
+	
+	\item \textbf{Contextualización espacial}: Proporcionan contexto geográfico para interpretar resultados estadísticos.
+	
+	\item \textbf{Selección de casos de estudio}: Identifican individuos representativos o interesantes para análisis en profundidad.
+	
+	\item \textbf{Evaluación de cobertura}: Permiten evaluar la representatividad geográfica del dataset y posibles sesgos espaciales.
+\end{enumerate}
+
+La combinación de visualizaciones interactivas (para exploración detallada) y estáticas (para análisis comparativo y comunicación) proporciona un conjunto completo de herramientas para comprender y analizar los patrones de movilidad peatonal desde múltiples perspectivas espaciales y temporales.
+
+\subsection{Implementación de algoritmo de \textit{clustering}}
+El análisis de \textit{clustering} mediante el algoritmo K-Means se implementa para descubrir patrones y tipologías naturales en las trayectorias peatonales sin la necesidad de etiquetas predefinidas. El \textit{script} \texttt{KMeans.py} implementa un \textit{pipeline} completo de análisis no supervisado sobre las trayectorias peatonales filtradas.
+
+\subsubsection{Preparación de datos}
+
+El proceso inicia con la preparación meticulosa de los datos de entrada:
+
+\begin{enumerate}
+	\item \textbf{Carga de datasets}: Se cargan dos archivos complementarios:
+	\begin{itemize}
+		\item \texttt{pedestrian\_trajectories\_all.csv}: Contiene las trayectorias peatonales filtradas.
+		\item \texttt{trajectory\_classification.csv}: Proporciona las métricas de calidad calculadas previamente.
+	\end{itemize}
+	
+	\item \textbf{Selección de características}: Se seleccionan 14 características numéricas relevantes para el análisis de clustering:
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{@{}cc@{}}
+			\toprule
+			\textbf{Característica} & \textbf{Descripción} \\ \midrule
+			records\_count & Volumen total de registros GPS del individuo \\
+			avg\_accuracy\_meters & Precisión promedio del GPS en metros \\
+			movement\_points & Cantidad de puntos con desplazamiento significativo \\
+			time\_span\_days & Duración temporal total de la trayectoria \\
+			active\_days\_count & Número de días con actividad registrada \\
+			spatial\_range & Amplitud geográfica total del área recorrida \\
+			score\_volume & Componente del score de calidad: volumen de datos \\
+			score\_duration & Componente del score: duración temporal \\
+			activity\_ratio & Proporción de días activos respecto al período total \\
+			score\_regularity & Componente del score: regularidad \\
+			score\_accuracy & Componente del score: precisión GPS \\
+			score\_mobility & Componente del score: movilidad \\
+			score\_diversity & Componente del score: diversidad espacial \\
+			quality\_score & Score compuesto final de calidad (0-100) \\ \bottomrule
+			\hline
+		\end{tabular}
+		\caption{Características utilizadas para el análisis de clustering}
+		\label{tab:caracteristicas_clustering}
+	\end{table}
+	
+	\item \textbf{Limpieza de datos}: Se manejan valores nulos rellenándolos con la media de cada columna correspondiente, preservando la integridad estadística del dataset.
+	
+	\item \textbf{Estandarización}: Todas las características se estandarizan utilizando \texttt{StandardScaler} para transformarlas a una distribución con media 0 y desviación estándar 1, un requisito esencial para el algoritmo K-Means que es sensible a la escala de las variables.
+\end{enumerate}
+
+\subsubsection{Análisis exploratorio preliminar}
+
+Antes de aplicar el clustering, se realiza un análisis exploratorio para comprender la estructura de los datos:
+
+\begin{enumerate}
+	\item \textbf{Matriz de correlación}: Se genera un \textbf{heatmap} de correlación que visualiza las relaciones lineales entre las 14 características, identificando posibles multicolinealidades.
+	
+	\item \textbf{Distribuciones de características}: Se crean histogramas de las 4 características más importantes:
+	\begin{itemize}
+		\item \texttt{quality\_score}: Score compuesto de calidad
+		\item \texttt{movement\_points}: Cantidad de movimientos
+		\item \texttt{spatial\_range}: Diversidad espacial
+		\item \texttt{active\_days\_count}: Días activos
+	\end{itemize}
+	
+	\item \textbf{Guardado de visualizaciones}: Los resultados se almacenan en:
+	\begin{itemize}
+		\item \texttt{pedestrian\_analysis/correlation\_matrix.png}
+		\item \texttt{pedestrian\_analysis/feature\_distributions.png}
+	\end{itemize}
+\end{enumerate}
+
+\subsubsection{Determinación del número óptimo de clusters}
+
+Para determinar el número adecuado de clusters ($k$), se implementan dos métodos complementarios:
+
+\paragraph{Método del codo (Elbow Method)}
+\begin{itemize}
+	\item Se ejecuta K-Means con valores de $k$ desde 1 hasta 10.
+	\item Para cada $k$, se calcula la \textbf{inercia}: suma de las distancias cuadradas de cada punto a su centroide asignado.
+	\item Se grafica la inercia en función de $k$. El punto donde la curva forma un "codo" (reducción marginal en inercia al aumentar $k$) indica el número óptimo de clusters.
+\end{itemize}
+
+\paragraph{Método del coeficiente de Silhouette}
+\begin{itemize}
+	\item Para cada $k$ desde 2 hasta 10, se calcula el \textbf{Silhouette Score}, una métrica que mide:
+	\begin{equation}
+		s(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}}
+	\end{equation}
+	donde $a(i)$ es la distancia promedio del punto $i$ a otros puntos en su mismo cluster, y $b(i)$ es la distancia promedio a puntos en el cluster más cercano.
+	\item Un score cercano a 1 indica clusters bien separados, mientras que scores cercanos a 0 o negativos sugieren solapamiento entre clusters.
+\end{itemize}
+
+
+\subsubsection{Ejecución del algoritmo K-Means}
+
+Una vez determinado el número óptimo de clusters:
+
+\begin{enumerate}
+	\item \textbf{Aplicación del algoritmo}: Se ejecuta K-Means con el valor $k$ seleccionado, utilizando inicialización \texttt{k-means++} para una convergencia más rápida y estable.
+	
+	\item \textbf{Asignación de clusters}: Cada trayectoria se asigna al cluster cuyo centroide es más cercano en el espacio de características de 14 dimensiones.
+	
+	\item \textbf{Evaluación de calidad}: Se calcula el Silhouette Score global para evaluar la calidad del agrupamiento resultante.
+	
+	\item \textbf{Integración de resultados}: Se agrega una columna \texttt{cluster} al dataset de clasificación con las asignaciones correspondientes.
+\end{enumerate}
+
+\subsubsection{Análisis e interpretación de clusters}
+
+Para cada cluster identificado, se realiza un análisis interpretativo detallado:
+
+\begin{enumerate}
+	\item \textbf{Estadísticas descriptivas}: Se calculan para cada característica:
+	\begin{itemize}
+		\item Media y desviación estándar
+		\item Valores mínimos y máximos
+		\item Cuartiles 25\%, 50\% (mediana), y 75\%
+	\end{itemize}
+	
+	\item \textbf{Caracterización cualitativa}: Cada cluster se caracteriza según umbrales predefinidos:
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{@{}cccc@{}}
+			\hline
+			\textbf{Dimensión} & \textbf{ALTA} & \textbf{MEDIA} & \textbf{BAJA} \\
+			\hline
+			Calidad (\texttt{quality\_score}) & $>80$ & $70-80$ & $<70$ \\
+			Movilidad (\texttt{spatial\_range}) & $>2.0$ & $0.5-2.0$ & $<0.5$ \\
+			Actividad (\texttt{movement\_points}) & $>500$ & $300-500$ & $<300$ \\
+			Persistencia (\texttt{active\_days}) & $>7$ & $3-7$ & $<3$ \\
+			\hline
+		\end{tabular}
+		\caption{Umbrales para caracterización cualitativa de clusters}
+		\label{tab:umbrales_clusters}
+	\end{table}
+	
+	\item \textbf{Resumen interpretativo}: Se genera un resumen descriptivo para cada cluster que incluye:
+	\begin{itemize}
+		\item Tamaño del cluster (número de individuos)
+		\item Perfil característico
+		\item Posibles interpretaciones comportamentales
+		\item Recomendaciones para análisis posterior
+	\end{itemize}
+\end{enumerate}
+
+El \textit{pipeline} genera los siguientes archivos de salida:
+
+\begin{enumerate}
+	\item \texttt{clustering\_results.csv}: Dataset completo con las asignaciones de cluster para cada individuo.
+	\item \texttt{cluster\_summary.csv}: Características promedio y estadísticas por cluster.
+	\item \texttt{clustering\_report.txt}: Resumen interpretativo en formato de texto.
+	\item Archivos PNG con todas las visualizaciones generadas.
+\end{enumerate}
+
+La implementación de \textit{clustering} se justifica por múltiples razones analíticas:
+
+\begin{enumerate}
+	\item \textbf{Descubrimiento de patrones naturales}: Permite identificar tipologías de usuarios que emergen naturalmente de los datos, sin sesgos de categorización predefinida.
+	
+	\item \textbf{Validación independiente del \textit{score} de calidad}: Si los \textit{clusters} se alinean consistentemente con los \textit{scores} de calidad, valida que las métricas capturan diferencias reales en patrones de movilidad.
+	
+	\item \textbf{Identificación de subgrupos ocultos}: Puede revelar grupos que el \textit{score} compuesto no discrimina (ej., usuarios con alta calidad pero patrones de movilidad cualitativamente diferentes).
+	
+	\item \textbf{Reducción de dimensionalidad}: El \textit{clustering} simplifica la complejidad del conjunto de datos agrupando individuos similares, facilitando análisis posteriores.
+	
+	\item \textbf{Caracterización comprehensiva}: Proporciona una taxonomía basada en datos para clasificar diferentes tipos de usuarios de movilidad.
+\end{enumerate}
+
+
+Basado en principios de análisis de \textit{cluster} y patrones típicos de movilidad, se anticipan los siguientes resultados:
+
+\begin{enumerate}
+	\item \textbf{Número óptimo de \textit{clusters}}: Se espera que los métodos del codo y Silhouette sugieran entre \textbf{3-5 \textit{clusters}}. Menos de 3 indicaría subagrupamiento, mientras que más de 5 probablemente representaría sobreajuste.
+	
+	\item \textbf{Calidad del agrupamiento}: El Silhouette Score debería estar en el rango \textbf{0.3-0.6}, indicando una separación moderada pero significativa (\textit{scores} $>0.7$ son raros en datos reales, $<0.2$ indica agrupamiento pobre).
+	
+	\item \textbf{Separación visual}: Los \textit{clusters} deberían diferenciarse claramente en la visualización PCA 2D, mostrando agrupaciones distintas con mínima superposición.
+	
+	\item \textbf{Tipologías esperadas}: Se anticipa identificar \textit{clusters} como:
+	
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|p{5cm}|p{5cm}|}
+			\hline
+			\textbf{Cluster} & \textbf{Características} & \textbf{Interpretación} \\
+			\hline
+			Cluster 1 & Alta calidad, alta movilidad, muchos días activos & Usuarios rutinarios ideales para modelado \\
+			\hline
+			Cluster 2 & Calidad media, movilidad moderada, actividad intermitente & Usuarios regulares con patrones menos consistentes \\
+			\hline
+			Cluster 3 & Baja calidad, baja movilidad, pocos días & Usuarios ocasionales o datos limitados \\
+			\hline
+			Cluster 4 & Alta calidad pero baja diversidad espacial & Usuarios con rutinas muy fijas y repetitivas \\
+			\hline
+		\end{tabular}
+		\caption{Tipologías de clusters esperadas}
+		\label{tab:tipologias_esperadas}
+	\end{table}
+	
+	\item \textbf{Correlaciones internas}: Se espera alta correlación entre características dentro de cada cluster y diferencias estadísticamente significativas entre clusters, confirmando la validez del agrupamiento.
+	
+	\item \textbf{Distribución de tamaños}: Probablemente un cluster dominante (usuarios ocasionales) que contenga la mayoría de los individuos, y clusters más pequeños pero cualitativamente distintos para usuarios especializados.
+\end{enumerate}
+
+Los resultados del \textit{clustering} tienen importantes implicaciones:
+
+\begin{enumerate}
+	\item \textbf{Segmentación para modelado}: Permite desarrollar modelos específicos para cada tipo de usuario, mejorando la precisión predictiva.
+	
+	\item \textbf{Priorización de análisis}: Identifica los \textit{clusters} más valiosos para análisis en profundidad (ej., usuarios rutinarios de alta calidad).
+	
+	\item \textbf{Validación de métricas}: Confirma que las métricas de calidad capturan dimensiones relevantes de variabilidad en los datos.
+	
+	\item \textbf{Descubrimiento de patrones}: Puede revelar patrones inesperados o contra-intuitivos en los datos de movilidad.
+	
+	\item \textbf{Base para análisis comparativo}: Proporciona un marco para comparar diferentes subpoblaciones en términos de comportamiento de movilidad.
+\end{enumerate}
+
+La implementación de este \textit{pipeline} completo de \textit{clustering} proporciona una herramienta poderosa para descubrir y caracterizar patrones naturales en los datos de movilidad peatonal, complementando y validando los análisis supervisados basados en \textit{scores} de calidad predefinidos.
+
+%\subsection{Inspección de valores únicos y estructura general}
+%Análisis pendiente
+
+\newpage
+% --------------------------
+% DETERMINACIÓN DE TIEMPOS DE PAUSA
+% --------------------------
 \section{Determinación de tiempos de pausa}
+El análisis de tiempos de pausa es fundamental para modelar el comportamiento estacionario entre desplazamientos peatonales. El script \texttt{wait\_time.py} implementa un algoritmo para identificar, medir y analizar sistemáticamente las pausas en las trayectorias peatonales filtradas.
+
+\subsubsection{Preparación de datos y segmentación temporal}
+
+El proceso inicia con una preparación cuidadosa de los datos y su segmentación en sesiones temporales coherentes:
+
+\begin{enumerate}
+	\item \textbf{Carga de datos}: Se carga el dataset \texttt{pedestrian\_trajectories\_all.csv} que contiene todas las trayectorias peatonales previamente filtradas y validadas.
+	
+	\item \textbf{Ordenamiento cronológico}: Los datos se ordenan secuencialmente por \texttt{identifier} y \texttt{timestamp} para asegurar un procesamiento temporal coherente.
+	
+	\item \textbf{Identificación de sesiones}: Para cada usuario individualmente, se analiza la secuencia temporal de registros GPS para identificar \textbf{sesiones de actividad}:
+	\begin{itemize}
+		\item Se definen \textbf{rupturas de sesión} cuando existe un intervalo temporal mayor a \texttt{max\_time\_gap\_minutes} (por defecto 120 minutos) entre puntos consecutivos.
+		\item Esto segmenta la trayectoria en sesiones discretas temporalmente, por ejemplo: "Sesión mañana: 8:00-12:30", "Sesión tarde: 14:00-19:00".
+		\item La segmentación en sesiones es esencial para distinguir entre pausas intradía (ej., descansos breves) y períodos de inactividad prolongada (ej., noche, fines de semana).
+	\end{itemize}
+\end{enumerate}
+
+\subsubsection{Detección de movimiento y clasificación de puntos}
+
+Dentro de cada sesión, se implementa un algoritmo de detección de movimiento basado en umbrales espaciales:
+
+\begin{enumerate}
+	\item \textbf{Cálculo de distancia}: Para cada par de puntos consecutivos dentro de una sesión, se calcula la distancia real utilizando la \textbf{fórmula de Haversine}.
+	
+	\item \textbf{Umbral de movimiento}: Se define un umbral de distancia configurable (\texttt{movement\_threshold\_km = 0.05 km = 50 metros}) para clasificar cada punto:
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{|c|c|p{8cm}|}
+			\hline
+			\textbf{Condición} & \textbf{Clasificación} & \textbf{Interpretación} \\
+			\hline
+			$d < 50$ m & \textbf{Pausa} & La persona está esencialmente detenida en la misma ubicación o moviéndose mínimamente dentro de un radio pequeño. \\
+			\hline
+			$d \geq 50$ m & \textbf{Movimiento} & La persona se está desplazando significativamente entre mediciones. \\
+			\hline
+		\end{tabular}
+		\caption{Clasificación de puntos basada en umbral de distancia}
+		\label{tab:clasificacion_movimiento}
+	\end{table}
+	
+	\item \textbf{Agrupación de puntos en pausa}: Se identifican secuencias continuas de puntos clasificados como "en pausa" y se agrupan en \textbf{ubicaciones de pausa} coherentes. El algoritmo:
+	\begin{itemize}
+		\item Inicia una nueva pausa al detectar el primer punto con $d < 50$ m.
+		\item Continúa agregando puntos mientras la distancia entre consecutivos permanezca bajo el umbral.
+		\item Finaliza la pausa al detectar $d \geq 50$ m, marcando el inicio de un nuevo movimiento.
+	\end{itemize}
+\end{enumerate}
+
+\subsubsection{Cálculo de métricas de pausa}
+
+Para cada pausa identificada, se calcula un conjunto completo de métricas descriptivas:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|p{9cm}|}
+		\hline
+		\textbf{Métrica} & \textbf{Descripción} \\
+		\hline
+		\texttt{pause\_start} & Timestamp del último punto antes de que la persona se detenga (inicio de la pausa) \\
+		\hline
+		\texttt{pause\_end} & Timestamp del primer punto al reanudar el movimiento (fin de la pausa) \\
+		\hline
+		\texttt{pause\_duration\_min} & Duración total de la pausa en minutos: $(pause\_end - pause\_start)$ \\
+		\hline
+		\texttt{pause\_lat, pause\_lon} & Coordenadas promedio de todos los puntos durante la pausa \\
+		\hline
+		\texttt{movement\_before\_points} & Número de puntos GPS en el movimiento inmediatamente anterior a la pausa \\
+		\hline
+		\texttt{movement\_after\_points} & Número de puntos GPS en el movimiento inmediatamente posterior a la pausa \\
+		\hline
+		\texttt{session\_id} & Identificador de la sesión a la que pertenece la pausa \\
+		\hline
+	\end{tabular}
+	\caption{Métricas calculadas para cada pausa identificada}
+	\label{tab:metricas_pausa}
+\end{table}
+
+\paragraph{Filtrado de calidad}: Se aplican filtros de calidad:
 \begin{itemize}
-	\item Cálculo de tiempos de pausa.
+	\item Solo se consideran pausas con \texttt{pause\_duration\_min} $> 0$, descartando transiciones instantáneas que podrían ser artefactos de medición.
+	\item Las pausas se asocian al contexto de su sesión correspondiente, permitiendo análisis por contexto temporal.
 \end{itemize}
 
-\section{Determinación de longitudes de vuelo}
+\subsubsection{Análisis estadístico exhaustivo}
+
+El script realiza un análisis estadístico completo en múltiples dimensiones:
+
+\paragraph{Estadísticas globales}
 \begin{itemize}
-	\item Cálculo de longitud de vuelo entre puntos consecutivos.
+	\item Número total de pausas detectadas en todo el dataset.
+	\item Estadísticas de duración: media, mediana, desviación estándar, mínima y máxima.
+	\item Distribución por categorías de duración: $<5$ min, $5-15$ min, $15-30$ min, $>30$ min.
+	\item Número de usuarios únicos con pausas detectadas y número total de sesiones.
 \end{itemize}
+
+\paragraph{Patrones temporales}
+\begin{itemize}
+	\item \textbf{Distribución horaria}: Frecuencia de pausas por hora del día (0-23), revelando horarios típicos de actividad estacionaria.
+	\item \textbf{Duración por hora}: Duración promedio de pausas por hora, identificando si ciertos horarios tienen pausas más prolongadas.
+	\item \textbf{Distribución por usuario}: Número de pausas por individuo, caracterizando patrones personales de actividad.
+\end{itemize}
+
+\paragraph{Relaciones exploratorias}
+\begin{itemize}
+	\item \textbf{Duración de pausa vs. actividad previa}: Correlación entre la duración de una pausa y la extensión del movimiento inmediatamente anterior.
+	\item \textbf{Patrones espacio-temporales}: Relación entre ubicación geográfica de la pausa y su duración/horario.
+\end{itemize}
+
+\subsubsection{Visualización comprehensiva}
+
+El script genera dos figuras principales con múltiples subplots para visualización comprehensiva:
+
+\paragraph{Figura 1: Análisis de duración de pausas}
+\begin{enumerate}
+	\item \textbf{Histograma de distribución}: Frecuencia de pausas por duración (todas las pausas).
+	\item \textbf{Histograma zoom}: Enfocado en pausas cortas ($<60$ minutos) para mayor detalle.
+	\item \textbf{Distribución logarítmica}: Histograma con escala logarítmica para visualizar todo el rango de duraciones.
+	\item \textbf{Boxplot}: Visualización de estadísticas descriptivas (mediana, cuartiles, outliers).
+	\item \textbf{Gráfico de barras por categorías}: Porcentaje de pausas en cada categoría de duración con anotaciones.
+	\item \textbf{Función de distribución acumulativa (CDF)}: Porcentaje de pausas que duran menos de $X$ minutos.
+\end{enumerate}
+
+\paragraph{Figura 2: Análisis temporal y contextual}
+\begin{enumerate}
+	\item \textbf{Pausas por hora del día}: Histograma de frecuencia de pausas por hora.
+	\item \textbf{Duración promedio por hora}: Gráfico de barras mostrando duración media por hora.
+	\item \textbf{Distribución por usuario}: Histograma de número de pausas por persona.
+	\item \textbf{Scatter plot}: Duración de pausa vs. puntos en movimiento previo.
+\end{enumerate}
+
+\subsubsection{Salida de resultados}
+
+El pipeline genera múltiples archivos de salida para análisis posterior:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{5cm}|p{8cm}|}
+		\hline
+		\textbf{Archivo} & \textbf{Contenido} \\
+		\hline
+		\texttt{pause\_times\_detailed.csv} & Detalles completos de cada pausa individual con todas las métricas calculadas \\
+		\hline
+		\texttt{session\_data.csv} & Información de cada sesión: inicio, fin, duración, número de pausas \\
+		\hline
+		\texttt{pause\_statistics\_summary.csv} & Resumen estadístico global de todas las pausas \\
+		\hline
+		\texttt{top\_100\_longest\_pauses.csv} & Las 100 pausas más largas detectadas para análisis de casos extremos \\
+		\hline
+		\texttt{pause\_analysis\_visualization.png} & Figuras con todos los subplots de visualización \\
+		\hline
+	\end{tabular}
+	\caption{Archivos de salida del análisis de tiempos de pausa}
+	\label{tab:archivos_pausa}
+\end{table}
+
+El análisis de tiempos de pausa es fundamental por múltiples razones:
+
+\begin{enumerate}
+	\item \textbf{Modelado realista de comportamiento}: Los tiempos de pausa representan el comportamiento estacionario entre desplazamientos, esencial para modelos de movilidad realistas.
+	
+	\item \textbf{Distinción de tipos de paradas}: Permite diferenciar entre:
+	\begin{itemize}
+		\item \textbf{Paradas breves (1-5 min)}: Semáforos, cruces peatonales, esperas cortas.
+		\item \textbf{Paradas significativas (30+ min)}: Trabajo, comidas, actividades sociales.
+	\end{itemize}
+	
+	\item \textbf{Validación de segmentación}: Pausas muy largas ($>2$ horas) pueden indicar que deberían considerarse como sesiones separadas, validando la segmentación temporal.
+	
+	\item \textbf{Enriquecimiento de modelos}: Los patrones de pausa proporcionan información temporal valiosa para enriquecer modelos de movilidad con comportamientos realistas.
+	
+	\item \textbf{Caracterización de actividades}: Diferentes tipos de actividades (laborales, recreativas, domésticas) tienen patrones característicos de pausa.
+\end{enumerate}
+
+Basado en principios de movilidad urbana y comportamiento humano, se anticipan los siguientes patrones:
+
+\paragraph{Distribución multimodal de duraciones}
+\begin{itemize}
+	\item \textbf{Pausas muy cortas ($<5$ min)}: Deberían ser muy frecuentes (40-60\% del total), representando semáforos, cruces peatonales, paradas breves en tiendas.
+	
+	\item \textbf{Pausas cortas (5-15 min)}: Frecuencia moderada (20-30\%), correspondiendo a compras rápidas, cafés, esperas breves.
+	
+	\item \textbf{Pausas medias (15-60 min)}: Menos frecuentes (10-20\%), representando comidas, reuniones cortas, actividades recreativas breves.
+	
+	\item \textbf{Pausas largas ($>60$ min)}: Raras pero importantes (5-10\%), correspondiendo a trabajo, hogar, eventos prolongados.
+\end{itemize}
+
+\paragraph{Patrones temporales esperados}
+\begin{itemize}
+	\item \textbf{Distribución horaria}: Picos de pausas alrededor de horarios de comida (13:00-15:00) y en horas laborales típicas.
+	
+	\item \textbf{Variación diaria}: Mayor frecuencia de pausas en días laborables comparado con fines de semana.
+	
+	\item \textbf{Actividad nocturna}: Pausas nocturnas (23:00-6:00) probablemente subrepresentadas debido a limitaciones en la recolección de datos (dispositivos en modo ahorro, personas durmiendo).
+\end{itemize}
+
+\paragraph{Características de usuarios}
+\begin{itemize}
+	\item \textbf{Número de pausas por día}: La mayoría de usuarios deberían mostrar 5-20 pausas por día, reflejando un número razonable de paradas durante actividades diarias.
+	
+	\item \textbf{Heterogeneidad individual}: Variabilidad significativa entre usuarios en términos de frecuencia y duración de pausas, reflejando diferentes estilos de vida y patrones de actividad.
+\end{itemize}
+
+\subsubsection{Implicaciones para el modelado de movilidad}
+
+Los resultados del análisis de tiempos de pausa tienen importantes implicaciones:
+
+\begin{enumerate}
+	\item \textbf{Calibración de modelos}: Los parámetros de distribución de tiempos de pausa pueden calibrar modelos de simulación de movilidad.
+	
+	\item \textbf{Segmentación de actividades}: Las categorías de duración pueden usarse para inferir tipos de actividades.
+	
+	\item \textbf{Validación de calidad}: Patrones anómalos (ej., pausas físicamente imposibles) pueden indicar errores en los datos o en el procesamiento.
+	
+	\item \textbf{Identificación de puntos de interés}: Concentraciones de pausas en ubicaciones específicas pueden identificar puntos de interés importantes.
+	
+	\item \textbf{Análisis comparativo}: Permite comparar patrones de pausa entre diferentes grupos demográficos o áreas geográficas.
+\end{enumerate}
+%\subsection{Inspección de valores únicos y estructura general}
+%Análisis pendiente
+
+% --------------------------
+% DETERMINACIÓN DE LONGITUDES DE VUELO
+% --------------------------
+\section{Determinación de longitudes de vuelo}
+El análisis de las distancias recorridas entre puntos de recorrido consecutivos, conocidas como \textbf{longitudes de vuelo}, es esencial para caracterizar cuantitativamente los patrones de desplazamiento peatonal. El script \texttt{distribution.py} implementa un análisis estadístico exhaustivo de estas distancias, incluyendo ajuste de distribuciones probabilísticas y análisis de patrones de movilidad.
+
+\subsubsection{Cálculo de longitudes de trayectoria}
+
+El proceso inicia con el cálculo de métricas espaciales para cada individuo:
+
+\begin{enumerate}
+	\item \textbf{Carga de datos}: Se carga el dataset \texttt{pedestrian\_trajectories\_all.csv} que contiene todas las trayectorias peatonales previamente filtradas y validadas.
+	
+	\item \textbf{Procesamiento individual}: Para cada \texttt{identifier} único:
+	\begin{itemize}
+		\item Se extraen todos los registros GPS ordenados cronológicamente.
+		\item Se calcula la desviación estándar de latitudes ($\sigma_{lat}$) y longitudes ($\sigma_{lon}$).
+		\item Se estima una longitud de trayectoria aproximada mediante:
+		\begin{equation}
+			L_{aproximada} = (\sigma_{lat} + \sigma_{lon}) \times 111 { km/grado}
+		\end{equation}
+		donde el factor 111 km/grado corresponde a la conversión aproximada de grados a kilómetros.
+		\item Se cuenta el número total de puntos GPS en la trayectoria.
+		\item Se calcula el span temporal total como la diferencia entre el primer y último \texttt{timestamp}.
+	\end{itemize}
+	
+	\item \textbf{Generación de dataset}: Se crea el dataset \texttt{trajectory\_lengths.csv} donde cada fila representa un individuo con sus métricas calculadas.
+\end{enumerate}
+
+\subsubsection{Análisis de distribución básico}
+
+Se genera un análisis visual básico mediante un gráfico con 4 subplots:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|p{9cm}|}
+		\hline
+		\textbf{Visualización} & \textbf{Propósito y características} \\
+		\hline
+		Histograma simple & Distribución de frecuencias de longitudes en km con escala lineal en ambos ejes \\
+		\hline
+		Histograma normalizado & Densidad de probabilidad (área total = 1) para análisis estadístico \\
+		\hline
+		Boxplot & Visualización de estadísticas descriptivas: mediana, cuartiles, rango intercuartílico y outliers \\
+		\hline
+		Grágico Q-Q (Quantile-Quantile) & Comparación directa entre los cuantiles observados y los esperados para una distribución normal teórica \\
+		\hline
+	\end{tabular}
+	\caption{Visualizaciones del análisis de distribución básica}
+	\label{tab:analisis_basico}
+\end{table}
+
+\paragraph{Interpretación del gráfico Q-Q}: 
+\begin{itemize}
+	\item \textbf{Puntos alineados en la diagonal}: Indican que los datos siguen una distribución normal.
+	\item \textbf{Desviaciones en las colas}: Sugieren colas más pesadas (curva convexa) o más ligeras (curva cóncava) que la distribución normal.
+	\item \textbf{Sesgo visible}: Curvatura sistemática indica asimetría en la distribución.
+\end{itemize}
+
+Los resultados se guardan en \texttt{Distributions/basic\_distribution\_analysis.png}.
+
+\subsubsection{Ajuste de distribuciones teóricas}
+
+Se evalúa el ajuste de 6 distribuciones probabilísticas teóricas comunes a los datos observados:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{3cm}|p{3cm}|p{9cm}|}
+		\hline
+		\textbf{Distribución} & \textbf{Parámetros} & \textbf{Características y aplicabilidad} \\
+		\hline
+		Normal (Gaussiana) & $\mu$, $\sigma$ & Distribución simétrica, apropiada para fenómenos con variaciones aleatorias aditivas \\
+		\hline
+		Lognormal & $\mu$, $\sigma$ del log & Valores positivos con cola derecha larga, común en fenómenos multiplicativos \\
+		\hline
+		Exponencial & $\lambda$ (tasa) & Sin memoria, apropiada para tiempos entre eventos independientes \\
+		\hline
+		Gamma & $\alpha$ (forma), $\beta$ (escala) & Generaliza exponencial, flexible para datos positivos sesgados \\
+		\hline
+		Weibull & $k$ (forma), $\lambda$ (escala) & Extremadamente flexible, modela tasas de fallo variables \\
+		\hline
+		Rayleigh & $\sigma$ (escala) & Caso especial de Weibull con $k=2$, apropiada para magnitudes \\
+		\hline
+	\end{tabular}
+	\caption{Distribuciones teóricas evaluadas para ajuste}
+	\label{tab:distribuciones_teoricas}
+\end{table}
+
+\paragraph{Métodos de ajuste y evaluación}:
+\begin{enumerate}
+	\item \textbf{Estimación de parámetros}: Para cada distribución, los parámetros se estiman usando \textbf{Máxima Verosimilitud (Maximum Likelihood Estimation, MLE)}.
+	
+	\item \textbf{Métricas de bondad de ajuste}:
+	\begin{itemize}
+		\item \textbf{Estadístico Kolmogorov-Smirnov (KS)}: 
+		\begin{equation}
+			D_n = \sup_x |F_n(x) - F(x)|
+		\end{equation}
+		Mide la máxima diferencia absoluta entre la función de distribución empírica $F_n(x)$ y la teórica $F(x)$. Valores menores indican mejor ajuste.
+		
+		\item \textbf{p-valor}: Probabilidad de observar los datos si provienen de la distribución teórica. Valores altos ($>0.05$) sugieren buen ajuste.
+		
+		\item \textbf{Criterio de Información de Akaike (AIC)}:
+		\begin{equation}
+			{AIC} = 2k - 2\ln(\hat{L})
+		\end{equation}
+		donde $k$ es el número de parámetros y $\hat{L}$ es la verosimilitud máxima. Valores menores indican mejor balance entre bondad de ajuste y complejidad.
+	\end{itemize}
+\end{enumerate}
+
+Los resultados se ordenan por estadístico KS (menor a mayor) y se guardan en \texttt{distribution\_fit\_results.csv}. Se generan dos figuras para visualizar los resultados del ajuste:
+
+\paragraph{Figura 1: Comparación de top distribuciones}
+\begin{itemize}
+	\item Muestra un histograma normalizado de los datos reales (en gris).
+	\item Superpone las curvas de función de densidad de probabilidad (PDF) de las 4 mejores distribuciones con colores diferentes.
+	\item Incluye una leyenda que indica el nombre de cada distribución y su estadístico KS correspondiente.
+	\item Permite comparación visual directa de qué distribución se ajusta mejor a la forma general de los datos.
+\end{itemize}
+
+\paragraph{Figura 2: Análisis individual por distribución}
+\begin{itemize}
+	\item Configuración 2×2 con 4 subplots, uno para cada distribución top.
+	\item Cada subplot muestra el histograma de datos con la curva de distribución ajustada superpuesta.
+	\item El título incluye el nombre de la distribución, estadístico KS y p-valor.
+	\item Anotaciones muestran los parámetros estimados específicos.
+\end{itemize}
+
+Estas visualizaciones se guardan en \textit{best\_fitted\_distributions.png} y \textit{individual\_distribution\_fits.png}. \\
+
+Se calcula un conjunto completo de estadísticas descriptivas guardadas en \textit{trajectory\_lengths\_statistics.csv}:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|p{4cm}|p{9cm}|}
+		\hline
+		\textbf{Estadística} & \textbf{Interpretación} \\
+		\hline
+		Count ($n$) & Número total de observaciones (individuos) \\
+		\hline
+		Mean ($\bar{x}$) & Longitud promedio de trayectoria \\
+		\hline
+		Std ($s$) & Desviación estándar, medida de dispersión absoluta \\
+		\hline
+		Percentiles (25\%, 50\%, 75\%) & Cuartiles de la distribución \\
+		\hline
+		Min, Max & Rango completo observado \\
+		\hline
+		Skewness ($\gamma_1$) & Medida de asimetría: $>0$ = cola derecha larga, $<0$ = cola izquierda larga, $=0$ = simétrica \\
+		\hline
+		Kurtosis ($\gamma_2$) & Medida de "peso" de colas y nitidez del pico: $>0$ = colas pesadas y pico alto, $<0$ = colas ligeras y pico bajo \\
+		\hline
+		CV (Coeficiente de Variación) & $s/\bar{x}$, medida de variabilidad relativa \\
+		\hline
+	\end{tabular}
+	\caption{Estadísticas descriptivas calculadas}
+	\label{tab:estadisticas_descriptivas}
+\end{table}
+
+Se genera una figura de cuadrícula 3×3 con 9 visualizaciones diferentes que proporcionan múltiples perspectivas sobre la distribución:
+
+\begin{enumerate}
+	\item \textbf{Distribución básica}: Histograma estándar de frecuencias.
+	
+	\item \textbf{Distribución logarítmica}: Histograma de $\log({longitud} + 1)$, útil para visualizar distribuciones con amplio rango.
+	
+	\item \textbf{Boxplot}: Estadísticas descriptivas visuales.
+	
+	\item \textbf{Violin plot}: Combina boxplot con estimación de densidad kernel, mostrando la distribución completa.
+	
+	\item \textbf{Función de distribución acumulativa empírica (ECDF)}: $F_n(x) = \frac{ obs \leq x}{n}$.
+	
+	\item \textbf{Estimación de densidad kernel (KDE)}: Aproximación suavizada de la PDF.
+	
+	\item \textbf{Gráfico Q-Q vs. Normal}: Verificación específica de normalidad.
+	
+	\item \textbf{Función de supervivencia}: $S(x) = 1 - F(x)$, en escala logarítmica en Y.
+	
+	\item \textbf{Percentiles acumulativos}: Mapeo de percentiles 0-100 a valores correspondientes.
+\end{enumerate}
+
+Esta figura se guarda como \texttt{comprehensive\_distribution\_analysis.png}. El análisis de distribución de longitudes de vuelo es fundamental por múltiples razones:
+
+\begin{enumerate}
+	\item \textbf{Generación de trayectorias sintéticas realistas}: Un simulador puede muestrear de la distribución ajustada para generar distancias de desplazamiento plausibles en modelos generativos.
+	
+	\item \textbf{Caracterización de patrones de movilidad}:
+	\begin{itemize}
+		\item \textbf{Distribuciones con cola pesada (heavy-tailed)}: Indican que la mayoría de movimientos son cortos pero ocasionalmente hay desplazamientos muy largos.
+		\item \textbf{Distribuciones exponenciales}: Sugieren procesos sin memoria (Markovianos).
+		\item \textbf{Distribuciones lognormales}: Indican procesos multiplicativos.
+	\end{itemize}
+	
+	\item \textbf{Validación de modelos teóricos}: Comparación con supuestos de modelos establecidos de movilidad humana:
+	\begin{itemize}
+		\item \textbf{Lévy flights}: Asumen distribuciones power-law.
+		\item \textbf{Random Waypoint}: Suele usar distribuciones uniformes o normales.
+		\item \textbf{Continuous Time Random Walks}: Emplean distribuciones específicas de paso.
+	\end{itemize}
+	
+	\item \textbf{Identificación del tipo de movilidad}: La forma de la distribución revela características fundamentales del proceso de movimiento.
+\end{enumerate}
+
+Basado en estudios previos de movilidad humana y principios de biomecánica peatonal, se anticipan los siguientes patrones:
+
+\paragraph{Forma de la distribución}
+\begin{itemize}
+	\item \textbf{No normalidad}: La distribución normal probablemente ajustará pobremente debido a:
+	\begin{itemize}
+		\item Valores no negativos (las longitudes no pueden ser negativas).
+		\item Presencia de cola derecha larga (right-skewed).
+		\item Evidencia en gráficos Q-Q mostrando desviaciones en las colas.
+	\end{itemize}
+	
+	\item \textbf{Distribuciones plausibles}: Mayor probabilidad de buen ajuste con:
+	\begin{itemize}
+		\item \textbf{Lognormal}: Común en fenómenos de movilidad con efectos multiplicativos.
+		\item \textbf{Weibull}: Flexible y capaz de modelar diversas formas.
+		\item \textbf{Gamma}: Adecuada para datos positivos sesgados.
+	\end{itemize}
+	
+	\item \textbf{Distribuciones menos probables}:
+	\begin{itemize}
+		\item \textbf{Exponencial}: Solo si los desplazamientos son completamente aleatorios sin memoria.
+		\item \textbf{Rayleigh}: Caso especial con aplicación más específica.
+	\end{itemize}
+\end{itemize}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|c|p{8cm}|}
+		\hline
+		\textbf{Estadística} & \textbf{Rango esperado} & \textbf{Interpretación} \\
+		\hline
+		Media ($\bar{x}$) & 0.5-1.5 km & Longitud típica de caminatas urbanas \\
+		\hline
+		Mediana & $<\bar{x}$ & Distribución sesgada positivamente \\
+		\hline
+		Skewness ($\gamma_1$) & $>0$ (positiva) & Cola derecha larga (ocasionales caminatas muy largas) \\
+		\hline
+		Kurtosis ($\gamma_2$) & $>0$ (positiva) & Colas más pesadas que la distribución normal \\
+		\hline
+		CV & 0.8-1.5 & Alta variabilidad relativa entre individuos \\
+		\hline
+		Percentil 90\% & 2-3 km & Solo el 10\% de trayectorias excede esta longitud \\
+		\hline
+	\end{tabular}
+	\caption{Resultados estadísticos esperados}
+	\label{tab:resultados_esperados}
+\end{table}
+
+El análisis exhaustivo de distribución de longitudes de vuelo proporciona una caracterización cuantitativa fundamental de los patrones de desplazamiento peatonal, estableciendo bases estadísticas sólidas para modelado y simulación de movilidad urbana.
 
 

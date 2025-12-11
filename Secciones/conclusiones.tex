@@ -1,0 +1,385 @@
+\section{Conclusiones Generales}
+
+Este proyecto ha logrado desarrollar una metodología completa para la caracterización de trayectorias individuales a partir de datos GPS masivos, con el objetivo de fundamentar el diseño de modelos de movilidad para la evaluación de protocolos en redes móviles. A través de un proceso sistemático de limpieza, clasificación, filtrado y análisis estadístico, se han obtenido resultados significativos que revelan tanto las posibilidades como las limitaciones inherentes a este tipo de datos.
+
+El procesamiento inicial del dataset, que contenía 69.98 millones de registros distribuidos en 19 columnas con un peso de 22 GB, permitió reducirlo a 51 millones de registros con 7 columnas esenciales (7 GB), representando una optimización del 68\% en tamaño sin pérdida de información relevante. Esta reducción no solo mejoró la eficiencia computacional de los análisis posteriores, sino que también evidenció la importancia de una adecuada selección de características en proyectos de big data.
+
+\section{Conclusiones por Objetivo}
+
+\subsection{Caracterización de la base de datos}
+
+La caracterización exhaustiva del dataset reveló características fundamentales sobre la calidad y naturaleza de los datos de movilidad:
+
+\paragraph{Calidad GPS:}
+\begin{itemize}
+	\item El 68.73\% de los registros poseen precisión GPS satelital (1-20 metros), lo cual representa una base sólida para análisis de trayectorias peatonales.
+	\item El 31.27\% restante corresponde a tecnologías de geolocalización menos precisas (A-GPS y triangulación WiFi/celular).
+	\item Esta distribución confirma que la mayoría de usuarios tienen dispositivos con capacidades GPS activas y funcionales.
+\end{itemize}
+
+\paragraph{Distribución de identificadores:}
+\begin{itemize}
+	\item De 6,022,772 identificadores únicos, el 98.17\% aparecen menos de 100 veces en el período de estudio.
+	\item Solo el 1.83\% (110,335 individuos) tienen 100 o más registros.
+	\item La eliminación de duplicados redujo el dataset en 27\% (19 millones de registros) sin afectar el número de individuos únicos, mejorando significativamente la calidad de los datos.
+\end{itemize}
+
+\paragraph{Cobertura temporal:}
+\begin{itemize}
+	\item Aproximadamente 80\% de los individuos aparecen en un solo día del período estudiado.
+	\item Solo un 5\% de individuos muestran actividad durante 7 o más días.
+	\item Esta distribución indica que la mayoría de usuarios son ocasionales o transitorios, limitando las posibilidades de análisis de rutinas a largo plazo.
+\end{itemize}
+
+\paragraph{Implicación principal:} Los datos GPS masivos de aplicaciones móviles contienen una gran cantidad de información, pero solo una pequeña fracción (aproximadamente 2\%) tiene la calidad y persistencia temporal suficiente para análisis detallados de patrones de movilidad.
+
+\subsection{Algoritmo de clasificación de calidad}
+
+El desarrollo del algoritmo de puntuación compuesta basado en seis métricas complementarias (volumen, duración, regularidad, precisión, movilidad y diversidad) demostró ser efectivo para identificar trayectorias útiles:
+
+\paragraph{Resultados del algoritmo:}
+\begin{itemize}
+	\item Identificó 129,920 individuos (2.15\% del total) con calidad REGULAR o superior.
+	\item La distribución por categorías muestra preponderancia de calidad REGULAR (64.3\%), seguida por BUENA (31.1\%), con solo 0.2\% EXCELENTE.
+	\item El umbral mínimo de 50 registros, 1 día de cobertura y 2 días activos demostró ser apropiado para garantizar información mínima analizable.
+\end{itemize}
+
+\paragraph{Validación del algoritmo:}
+El análisis de clustering posterior validó la efectividad del score de calidad:
+\begin{itemize}
+	\item La separación clara en 4 clusters con características diferenciadas confirma que las métricas capturan dimensiones reales de la calidad de datos.
+	\item La correlación fuerte entre \texttt{quality\_score} y \texttt{records\_count} ($r = 0.67$) y \texttt{score\_volume} ($r = 0.75$) indica que el volumen de datos es el factor más determinante de calidad.
+	\item La varianza explicada del 47.62\% por las dos primeras componentes principales sugiere que las 14 características contienen redundancia moderada pero también información complementaria valiosa.
+\end{itemize}
+
+\paragraph{Fortalezas del algoritmo:}
+\begin{itemize}
+	\item \textbf{Objetivo y reproducible}: Elimina subjetividad en la selección de trayectorias.
+	\item \textbf{Multidimensional}: Considera aspectos complementarios (temporal, espacial, precisión).
+	\item \textbf{Escalable}: Puede calcularse eficientemente en bases de datos mediante SQL.
+	\item \textbf{Interpretable}: Los scores componentes permiten diagnosticar deficiencias específicas.
+\end{itemize}
+
+\paragraph{Limitaciones identificadas:}
+\begin{itemize}
+	\item \textbf{Sensibilidad al volumen}: Los pesos actuales (25\% volumen, 20\% duración) favorecen excesivamente cantidad sobre calidad.
+	\item \textbf{Falta de normalización contextual}: No considera que 100 registros en 1 día es diferente que 100 registros en 10 días.
+	\item \textbf{Umbral único}: Un umbral de 35 puntos puede ser insuficiente para ciertos tipos de análisis que requieren mayor calidad.
+\end{itemize}
+
+\subsection{Identificación de trayectorias peatonales}
+
+La aplicación del filtro de velocidad basado en parámetros biomecánicos (0.6-2.08 m/s) fue crucial para aislar movimiento peatonal genuino:
+
+\paragraph{Efectividad del filtrado:}
+\begin{itemize}
+	\item De 129,920 individuos clasificados, solo 41,882 (32.5\%) tienen trayectorias peatonales válidas.
+	\item La reducción del 67.5\% indica que la mayoría de usuarios se desplazan predominantemente en vehículos motorizados.
+	\item La velocidad promedio resultante (1.17 m/s $\approx$ 4.21 km/h) es consistente con estudios de marcha humana normal.
+	\item El límite superior alcanzado exactamente (2.08 m/s) confirma que el filtro opera correctamente.
+\end{itemize}
+
+\paragraph{Segmentación de trayectorias:}
+\begin{itemize}
+	\item La división de trayectorias en segmentos continuos permitió separar períodos de caminata de períodos en vehículo.
+	\item Se generaron 171,461 puntos de recorrido peatonal validados, organizados en múltiples segmentos por usuario.
+	\item Esta segmentación preserva la integridad temporal de cada modo de transporte.
+\end{itemize}
+
+\paragraph{Cobertura geográfica:}
+\begin{itemize}
+	\item Las trayectorias abarcan desde el sur de México (Chiapas, lat. 14.7°) hasta el norte (Baja California, lat. 32.7°).
+	\item Rango longitudinal desde la costa del Pacífico (-117.1°) hasta la península de Yucatán (-86.7°).
+	\item Esta amplia cobertura permite generalización de resultados a diferentes contextos urbanos mexicanos.
+\end{itemize}
+
+\paragraph{Desafío principal:} La alta proporción de usuarios descartados (67.5\%) plantea la pregunta de si los umbrales son demasiado restrictivos o si genuinamente la movilidad peatonal pura es rara en contextos urbanos contemporáneos donde el transporte motorizado domina.
+
+\subsection{Aplicación de inteligencia artificial: Clustering K-Means}
+
+El clustering no supervisado reveló cuatro perfiles de usuario claramente diferenciados, validando la hipótesis de que existen subgrupos naturales en los datos:
+
+\paragraph{Hallazgos principales:}
+\begin{enumerate}
+	\item \textbf{Super Usuarios (Cluster 1, 25\%):}
+	\begin{itemize}
+		\item Representan el segmento ideal para modelado: alta calidad (66.32 puntos), movilidad significativa (0.56 spatial range), consistencia temporal (5.74 días activos).
+		\item Son el grupo objetivo prioritario para extracción de patrones de movilidad representativos.
+		\item Probablemente corresponden a usuarios que usan la aplicación como herramienta principal de navegación o tracking.
+	\end{itemize}
+	
+	\item \textbf{Usuarios Moderados (Cluster 2, 24\%):}
+	\begin{itemize}
+		\item Presentan un desafío específico: actividad regular pero menor precisión GPS (21.28m promedio).
+		\item La menor precisión sugiere uso de A-GPS o triangulación en lugar de GPS puro.
+		\item Útiles para análisis de patrones generales pero no para modelado de alta resolución.
+	\end{itemize}
+	
+	\item \textbf{Bajo Volumen (Cluster 0, 26\%):}
+	\begin{itemize}
+		\item Movilidad muy localizada (0.42 spatial range) sugiere usuarios que no salen frecuentemente de su vecindario.
+		\item Valiosos para estudiar movilidad intra-barrial o comportamiento de poblaciones con limitaciones de movilidad.
+		\item Menor utilidad para modelar desplazamientos urbanos de largo alcance.
+	\end{itemize}
+	
+	\item \textbf{Usuarios Irregulares (Cluster 3, 25\%):}
+	\begin{itemize}
+		\item Períodos de observación muy cortos (2.32 días time\_span) limitan severamente su utilidad.
+		\item Probablemente representan instalaciones temporales de la app o uso turístico.
+		\item Menos relevantes para modelado de rutinas pero potencialmente útiles para estudiar movilidad de visitantes.
+	\end{itemize}
+\end{enumerate}
+
+\paragraph{Validación cruzada:}
+\begin{itemize}
+	\item La distribución relativamente uniforme (24-26\% en cada cluster) indica que el algoritmo no está sesgado hacia crear clusters desbalanceados.
+	\item La correlación entre características dentro de cada cluster confirma consistencia interna.
+	\item La separación clara en el espacio PCA (47.62\% varianza explicada) demuestra que los clusters capturan diferencias reales, no artificiales.
+\end{itemize}
+
+\paragraph{Implicación para el modelado:} Los modelos de movilidad deberían considerar estos perfiles diferenciados, potencialmente creando modelos especializados para cada cluster en lugar de un modelo único que intente capturar toda la heterogeneidad.
+
+\subsection{Caracterización de elementos del modelo de movilidad}
+
+\paragraph{Puntos de recorrido:}
+Los 171,461 puntos de recorrido peatonal identificados representan ubicaciones validadas donde los individuos se encuentran durante su movilidad a pie. La distribución geográfica amplia (latitud 14.7°-32.7°, longitud -117.1° a -86.7°) sugiere que los patrones encontrados pueden generalizarse a diferentes contextos urbanos mexicanos.
+
+\textbf{Características destacadas:}
+\begin{itemize}
+	\item Los puntos están concentrados en áreas urbanas, como se esperaba.
+	\item La precisión promedio de estos puntos está dentro del rango de GPS satelital.
+	\item La segmentación temporal (por día) permite rastrear evolución de patrones.
+\end{itemize}
+
+\textbf{Limitación:} No se identificaron explícitamente "puntos de interés" (POIs) recurrentes como hogar, trabajo, etc. Este análisis requeriría clustering espacial adicional que no se implementó en este proyecto.
+
+\paragraph{Tiempos de pausa:}
+El análisis de pausas reveló un patrón bimodal significativo:
+
+\textbf{Hallazgos principales:}
+\begin{itemize}
+	\item \textbf{Distribución bimodal clara:}
+	\begin{itemize}
+		\item 32.4\% de pausas son muy cortas (<5 minutos): semáforos, esperas breves.
+		\item 35.9\% de pausas son largas (>30 minutos): trabajo, hogar, comidas.
+		\item Solo 12.8\% en el rango intermedio (15-30 minutos).
+	\end{itemize}
+	
+	\item \textbf{Estadísticas centrales:}
+	\begin{itemize}
+		\item Media: 32 minutos (influenciada por colas largas).
+		\item Mediana: 14 minutos (más representativa del comportamiento típico).
+		\item Máximo: 7.9 horas (períodos de sueño o estancias muy prolongadas).
+	\end{itemize}
+	
+	\item \textbf{Alta variabilidad:}
+	\begin{itemize}
+		\item Desviación estándar (40.1 min) > Media (32 min).
+		\item Coeficiente de variación alto indica heterogeneidad extrema.
+		\item No es posible un modelo de pausa único; se requiere modelo de mezcla.
+	\end{itemize}
+\end{itemize}
+
+\textbf{Limitación crítica:} Solo el 1.8\% de usuarios (739 de 41,882) mostraron pausas detectables. Esto sugiere que:
+\begin{itemize}
+	\item Los umbrales de detección (distancia <50m, tiempo >1 segundo) son muy restrictivos.
+	\item La mayoría de trayectorias son demasiado cortas para contener pausas.
+	\item Muchos usuarios tienen datos GPS dispersos temporalmente sin suficiente resolución.
+\end{itemize}
+
+Para un modelo de movilidad efectivo, se recomienda:
+\begin{itemize}
+	\item Distribución de mezcla con dos componentes: pausas cortas (exponencial, $\lambda \approx 0.2$) y pausas largas (lognormal, $\mu \approx 3.5$, $\sigma \approx 1.2$).
+	\item Probabilidad de pausa corta vs. larga: 55\% vs. 45\%.
+	\item Filtrado de pausas <30 segundos como artefactos.
+\end{itemize}
+
+\paragraph{Longitudes de vuelo:}
+Este análisis reveló los resultados más complejos y problemáticos del proyecto:
+
+\textbf{Hallazgo fundamental: Distribución inflada en cero:}
+\begin{itemize}
+	\item 50\% de usuarios: longitud = 0 km (sin desplazamiento detectable).
+	\item 25\% de usuarios: longitud 0.01-0.63 km (movilidad muy local).
+	\item 25\% de usuarios: longitud >0.63 km (movilidad significativa).
+\end{itemize}
+
+\textbf{Métricas extremas:}
+\begin{itemize}
+	\item Skewness: 31.06 (asimetría extrema).
+	\item Kurtosis: 1,341.15 (colas extraordinariamente pesadas).
+	\item CV: 8.08 (variabilidad 8 veces la media).
+	\item Máximo: 1,746 km (outlier claro).
+\end{itemize}
+
+\textbf{Fracaso de modelos paramétricos:}
+\begin{itemize}
+	\item Ninguna distribución estándar (normal, lognormal, exponencial, gamma, Weibull, Rayleigh) ajustó adecuadamente.
+	\item KS statistics >0.45 (valores >0.1 ya indican mal ajuste).
+	\item p-values = 0.0 (rechazo completo de todas las hipótesis).
+\end{itemize}
+
+\textbf{Diagnóstico del problema:}
+\begin{itemize}
+	\item \textbf{Método de cálculo simplificado}: Se usó $(\sigma_{lat} + \sigma_{lon}) \times 111$ como proxy de distancia total, no la suma de distancias reales entre puntos consecutivos.
+	\item \textbf{Definición ambigua de "longitud de trayectoria"}: ¿Es la distancia total recorrida? ¿Es el rango espacial (máx-mín)? ¿Es la distancia entre primer y último punto?
+	\item \textbf{Heterogeneidad extrema no modelable}: La mezcla de usuarios sedentarios (50\%), locales (25\%) y móviles (25\%) no puede capturarse con una sola distribución.
+\end{itemize}
+
+\textbf{Recomendación crítica para trabajo futuro:}
+El concepto de "longitud de vuelo" debe redefinirse como la distancia entre puntos de recorrido consecutivos (no la longitud total de trayectoria). Esto requiere:
+\begin{itemize}
+	\item Calcular distancia haversine entre cada par de puntos sucesivos.
+	\item Analizar la distribución de estas distancias individuales.
+	\item Esto produciría una distribución más homogénea y modelable.
+\end{itemize}
+
+\section{Limitaciones del Estudio}
+
+\subsection{Limitaciones de los datos}
+
+\begin{enumerate}
+	\item \textbf{Período temporal limitado:}
+	\begin{itemize}
+		\item Solo 10 días de datos (6-15 noviembre 2022).
+		\item Imposible capturar patrones de largo plazo, estacionalidad, o variación mensual/anual.
+		\item Sesgos potenciales por eventos específicos de esas fechas.
+	\end{itemize}
+	
+	\item \textbf{Cobertura geográfica sesgada:}
+	\begin{itemize}
+		\item Datos concentrados en áreas urbanas.
+		\item Posible subrepresentación de zonas rurales, áreas de bajos ingresos, o grupos demográficos específicos.
+		\item No se tiene información demográfica de los usuarios para validar representatividad.
+	\end{itemize}
+	
+	\item \textbf{Usuarios mayoritariamente ocasionales:}
+	\begin{itemize}
+		\item 80\% de usuarios aparecen solo 1 día.
+		\item Dificulta análisis de rutinas y patrones recurrentes.
+		\item Sesgo hacia movilidad no-rutinaria (turismo, eventos especiales).
+	\end{itemize}
+	
+	\item \textbf{Baja tasa de detección de pausas:}
+	\begin{itemize}
+		\item Solo 1.8\% de usuarios con pausas detectables.
+		\item Umbrales de detección quizás demasiado restrictivos.
+		\item Resolución temporal del GPS (muestreo) insuficiente para capturar todas las pausas.
+	\end{itemize}
+\end{enumerate}
+
+\subsection{Limitaciones metodológicas}
+
+\begin{enumerate}
+	\item \textbf{Cálculo simplificado de longitudes de trayectoria:}
+	\begin{itemize}
+		\item Uso de $(\sigma_{lat} + \sigma_{lon}) \times 111$ en lugar de suma de distancias reales.
+		\item Produce estimaciones imprecisas especialmente para trayectorias con retornos al origen.
+		\item Imposibilita ajuste de distribuciones paramétricas estándar.
+	\end{itemize}
+	
+	\item \textbf{Falta de validación externa:}
+	\begin{itemize}
+		\item No se contrastaron resultados con datos de referencia (surveys, GPS de alta precisión).
+		\item No se validó que los "Super usuarios" genuinamente tengan patrones de movilidad superiores.
+		\item Asunciones no verificadas (ej. velocidad 0.6-2.08 m/s cubre toda movilidad peatonal real).
+	\end{itemize}
+	
+	\item \textbf{Clustering sin validación semántica:}
+	\begin{itemize}
+		\item Los 4 clusters identificados no se validaron contra información real de usuarios.
+		\item No se sabe si los "Super usuarios" son realmente personas más móviles o simplemente usuarios que dejaron la app activa más tiempo.
+		\item Falta análisis de estabilidad (¿los mismos usuarios permanecen en el mismo cluster en diferentes períodos?).
+	\end{itemize}
+	
+	\item \textbf{Ausencia de análisis de POIs:}
+	\begin{itemize}
+		\item No se identificaron lugares recurrentes (hogar, trabajo, lugares frecuentes).
+		\item Imposible distinguir entre movimiento exploratorio vs. rutinario.
+		\item Limita aplicabilidad para modelado de rutinas.
+	\end{itemize}
+\end{enumerate}
+
+\subsection{Limitaciones computacionales}
+
+\begin{enumerate}
+	\item \textbf{Restricciones de memoria:}
+	\begin{itemize}
+		\item Procesamiento por chunks limita algunos análisis (ej. clustering global de todos los usuarios).
+		\item No se pudieron aplicar técnicas más sofisticadas que requieren carga completa en RAM.
+		\item Algunos cálculos (ej. detección de pausas) son computacionalmente costosos y se limitaron a subconjuntos.
+	\end{itemize}
+	
+	\item \textbf{Tiempo de procesamiento:}
+	\begin{itemize}
+		\item Varios scripts toman horas en ejecutarse completamente.
+		\item Limita iteración y refinamiento de parámetros.
+		\item Imposibilita análisis interactivo o exploratorio ágil.
+	\end{itemize}
+\end{enumerate}
+
+\section{Trabajo Futuro}
+
+\subsection{Mejoras inmediatas al pipeline actual}
+
+\begin{enumerate}
+	\item \textbf{Recalcular longitudes de vuelo correctamente:}
+	\begin{itemize}
+		\item Implementar cálculo de suma de distancias haversine entre puntos consecutivos.
+		\item Analizar distribución de distancias individuales (step lengths) en lugar de longitud total de trayectoria.
+		\item Ajustar distribuciones estándar (lognormal, Weibull, gamma) a las distancias individuales.
+	\end{itemize}
+	
+	\item \textbf{Refinar algoritmos de detección de pausas:}
+	\begin{itemize}
+		\item Ajustar umbrales de distancia (¿20m en lugar de 50m?) y tiempo mínimo.
+		\item Implementar detección multi-escala para capturar diferentes tipos de pausas.
+		\item Validar resultados contra datasets etiquetados o simulados.
+	\end{itemize}
+	
+	\item \textbf{Mejorar el algoritmo de clasificación de calidad:}
+	\begin{itemize}
+		\item Revisar pesos de las métricas (disminuir peso de volumen, aumentar peso de regularidad).
+		\item Introducir normalización contextual (registros por día en lugar de total absoluto).
+		\item Implementar umbrales adaptativos por contexto geográfico/temporal.
+	\end{itemize}
+	
+	\item \textbf{Optimizaciones computacionales:}
+	\begin{itemize}
+		\item Vectorizar cálculos de distancias haversine.
+		\item Implementar procesamiento paralelo para scripts más costosos.
+		\item Migrar algunos cálculos a bases de datos (PostGIS) para mayor eficiencia.
+	\end{itemize}
+\end{enumerate}
+
+\subsection{Extensiones metodológicas}
+
+\begin{enumerate}
+	\item \textbf{Identificación de puntos de interés (POIs):}
+	\begin{itemize}
+		\item Aplicar clustering espacial (DBSCAN, OPTICS) para identificar lugares recurrentes.
+		\item Inferir funciones de POIs (hogar, trabajo, ocio) basado en patrones temporales.
+		\item Integrar datos externos (OpenStreetMap, Google Places) para enriquecer contexto.
+	\end{itemize}
+	
+	\item \textbf{Análisis de rutinas temporales:}
+	\begin{itemize}
+		\item Identificar patrones diarios/semanales de movilidad.
+		\item Detectar rutinas (home-work-home) y variaciones.
+		\item Analizar regularidad vs. aleatoriedad en patrones de desplazamiento.
+	\end{itemize}
+	
+	\item \textbf{Análisis de redes de movilidad:}
+	\begin{itemize}
+		\item Construir grafos de movilidad (nodos = ubicaciones, aristas = transiciones).
+		\item Calcular métricas de red (centralidad, modularidad, clusters).
+		\item Identificar hubs de actividad y rutas principales.
+	\end{itemize}
+	
+	\item \textbf{Validación cruzada con datos externos:}
+	\begin{itemize}
+		\item Comparar resultados con surveys de movilidad (ENMODO, INEGI).
+		\item Validar perfiles de usuario con datos demográficos (si disponibles).
+		\item Contrastar con datos GPS de alta precisión (estudios controlados).
+	\end{itemize}
+\end{enumerate}

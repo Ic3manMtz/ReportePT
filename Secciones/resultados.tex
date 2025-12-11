@@ -1,0 +1,466 @@
+\section{Resultados de Clasificación de Calidad de Trayectorias}
+
+El proceso de clasificación de calidad produjo los siguientes resultados a partir del dataset procesado:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{@{}cccc@{}}
+		\toprule
+		\textbf{Categoría} & \textbf{Cantidad} & \textbf{Porcentaje} & \textbf{Interpretación}                                                                                               \\ \midrule
+		REGULAR            & 83,430            & 64.3\%              & \begin{tabular}[c]{@{}c@{}}Trayectorias con información suficiente\\ para análisis básico\end{tabular}                \\
+		BUENA              & 40,373            & 31.3\%              & \begin{tabular}[c]{@{}c@{}}Trayectorias con buena cobertura\\ temporal y espacial\end{tabular}                        \\
+		MUY BUENA          & 5,863             & 4.5\%               & \begin{tabular}[c]{@{}c@{}}Trayectorias con alta calidad\\ y consistencia\end{tabular}                                \\
+		EXCELENTE          & 254               & 0.2\%               & \begin{tabular}[c]{@{}c@{}}Trayectorias ideales con máxima\\ calidad de datos\end{tabular}                            \\
+		\textbf{Total}     & \textbf{129,920}  & \textbf{100\%}      & \textbf{\begin{tabular}[c]{@{}c@{}}Individuos con calidad REGULAR\\ o superior (\textgreater 35 puntos)\end{tabular}} \\ \bottomrule
+	\end{tabular}
+	\caption{Distribución de individuos por categoría de calidad}
+	\label{tab:distribucion_calidad}
+\end{table}
+
+\paragraph{Análisis de la distribución}
+\begin{itemize}
+	\item \textbf{Dataset procesado}: Total de 51,077,925 registros después de la limpieza.
+	\item \textbf{Umbral de calidad}: Se identificaron 129,920 individuos con calidad REGULAR o superior (puntuación $\geq$35).
+	\item \textbf{Representatividad}: Estos individuos representan aproximadamente el 2.15\% del total original (129,920 de 6,022,772 identificadores únicos).
+	\item \textbf{Implicación}: El algoritmo de puntuación compuesta logró identificar eficientemente una fracción pequeña pero significativa de individuos con datos de calidad suficiente para análisis de movilidad.
+\end{itemize}
+
+\section{Resultados de Extracción de Trayectorias Peatonales}
+
+La aplicación del filtro peatonal basado en rangos de velocidad (0.6 - 2.08 m/s o 2.16 - 7.49 km/h) produjo los siguientes resultados:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{@{}ccc@{}}
+		\toprule
+		\textbf{Métrica}                                                                      & \textbf{Valor} & \textbf{Interpretación}                                                                              \\ \midrule
+		\begin{tabular}[c]{@{}c@{}}Puntos peatonales\\ válidos\end{tabular}                   & 171,461        & \begin{tabular}[c]{@{}c@{}}Total de puntos GPS dentro del rango\\ de velocidad peatonal\end{tabular} \\
+		\begin{tabular}[c]{@{}c@{}}Usuarios únicos con\\ trayectorias peatonales\end{tabular} & 41,882         & 32.5\% de los individuos clasificados                                                                \\
+		\begin{tabular}[c]{@{}c@{}}Periodo temporal\\ cubierto\end{tabular}                   & 6-14 Nov 2022  & 9 días de actividad monitoreada                                                                      \\
+		Velocidad promedio                                                                    & 1.17 m/s       & Consistente con caminata humana normal                                                               \\
+		\begin{tabular}[c]{@{}c@{}}Velocidad máxima\\ registrada\end{tabular}                 & 2.08 m/s       & Límite superior del filtro aplicado                                                                  \\ \bottomrule
+	\end{tabular}
+	\caption{Resultados de la extracción de trayectorias peatonales}
+	\label{tab:resultados_peatonales}
+\end{table}
+
+\paragraph{Análisis de reducción por filtrado}
+\begin{itemize}
+	\item \textbf{Reducción significativa}: De 129,920 individuos clasificados se redujo a 41,882 con trayectorias peatonales válidas, lo que representa una reducción del 67.8\%.
+	\item \textbf{Interpretación}: Aproximadamente dos tercios de los individuos clasificados usaban predominantemente transporte motorizado o tenían patrones de movimiento fuera del rango peatonal.
+	\item \textbf{Calidad del dataset resultante}: Los 41,882 individuos restantes representan una muestra de alta calidad para análisis de movilidad peatonal específica.
+\end{itemize}
+
+\section{Resultados del Análisis de Clustering (K-Means)}
+
+\subsection{Configuración y distribución general}
+
+Se aplicó el algoritmo K-Means con $k=4$ clusters sobre 14 características extraídas de las trayectorias de calidad:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|c|c|p{8cm}|}
+		\hline
+		\textbf{Cluster} & \textbf{Cantidad} & \textbf{Porcentaje} & \textbf{Denominación} \\
+		\hline
+		Cluster 0 & $\sim$26,000 & 26\% & Bajo volumen \\
+		\hline
+		Cluster 1 & $\sim$25,000 & 25\% & Super usuarios \\
+		\hline
+		Cluster 2 & $\sim$24,000 & 24\% & Usuarios moderados \\
+		\hline
+		Cluster 3 & $\sim$25,000 & 25\% & Usuarios irregulares \\
+		\hline
+	\end{tabular}
+	\caption{Distribución de individuos por cluster (valores aproximados)}
+	\label{tab:distribucion_clusters}
+\end{table}
+
+\paragraph{Calidad del clustering}
+\begin{itemize}
+	\item \textbf{Varianza explicada por PCA}: Las dos primeras componentes principales explican el 47.62\% de la varianza total:
+	\begin{itemize}
+		\item PC1: 27.91\% (mayor variabilidad)
+		\item PC2: 19.71\% (segunda mayor variabilidad)
+	\end{itemize}
+	\item \textbf{Separación visual}: Los clusters muestran separación clara en el espacio PCA, indicando agrupaciones bien definidas y diferenciadas.
+\end{itemize}
+
+\subsection{Caracterización detallada de clusters}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{2.5cm}|c|c|c|c|c|}
+		\hline
+		\textbf{Cluster / Métrica} & \textbf{Quality Score} & \textbf{Movement Points} & \textbf{Spatial Range} & \textbf{Active Days} & \textbf{Records Count} \\
+		\hline
+		\textbf{Cluster 1: Super Usuarios} & 66.32 & 35.82 & 0.56 & 5.74 & 486.79 \\
+		\hline
+		\textbf{Cluster 2: Usuarios Moderados} & 49.65 & 8.69 & 0.47 & 5.75 & - \\
+		\hline
+		\textbf{Cluster 0: Bajo Volumen} & 43.51 & 4.21 & 0.42 & 3.36 & - \\
+		\hline
+		\textbf{Cluster 3: Usuarios Irregulares} & 45.82 & 3.33 & 0.21 & 2.94 & - \\
+		\hline
+	\end{tabular}
+	\caption{Caracterización cuantitativa de los clusters identificados}
+	\label{tab:caracterizacion_clusters}
+\end{table}
+
+\paragraph{Perfiles comportamentales}
+\begin{enumerate}
+	\item \textbf{Cluster 1: "Super Usuarios"} (25\%):
+	\begin{itemize}
+		\item \textbf{Perfil}: Usuarios con patrones de movilidad intensos y excelente calidad de datos.
+		\item \textbf{Interpretación}: Representan el segmento ideal para modelado de trayectorias, con suficiente información temporal y espacial para capturar patrones complejos de movilidad urbana.
+	\end{itemize}
+	
+	\item \textbf{Cluster 2: "Usuarios Moderados"} (24\%):
+	\begin{itemize}
+		\item \textbf{Característica distintiva}: Precisión GPS promedio de 21.28 metros (la más baja de todos los clusters).
+		\item \textbf{Perfil}: Usuarios regulares con actividad sostenida pero menor precisión GPS, sugiriendo uso de A-GPS o triangulación WiFi.
+		\item \textbf{Aplicación}: Útiles para análisis de patrones generales pero con menor resolución espacial.
+	\end{itemize}
+	
+	\item \textbf{Cluster 0: "Bajo Volumen"} (26\%):
+	\begin{itemize}
+		\item \textbf{Perfil}: Usuarios con baja actividad y movilidad reducida.
+		\item \textbf{Interpretación}: Probablemente usuarios ocasionales o personas con rutinas muy localizadas.
+		\item \textbf{Aplicación}: Menos útiles para modelado general pero valiosos para estudiar patrones de movilidad local.
+	\end{itemize}
+	
+	\item \textbf{Cluster 3: "Usuarios Irregulares"} (25\%):
+	\begin{itemize}
+		\item \textbf{Características distintivas}: Time Span de solo 2.32 días (período de observación muy corto).
+		\item \textbf{Perfil}: Usuarios con patrones muy irregulares o períodos de monitoreo breves.
+		\item \textbf{Interpretación}: Probablemente representan uso esporádico de la aplicación o instalaciones/desinstalaciones frecuentes.
+	\end{itemize}
+\end{enumerate}
+
+\subsection{Análisis de correlaciones entre características}
+
+La matriz de correlación reveló relaciones significativas que validan el diseño del algoritmo de puntuación:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{6cm}|c|p{8cm}|}
+		\hline
+		\textbf{Relación} & \textbf{Coeficiente (r)} & \textbf{Interpretación} \\
+		\hline
+		\texttt{quality\_score} $\leftrightarrow$ \texttt{records\_count} & 0.67 & Más datos implica mejor calidad (correlación positiva fuerte) \\
+		\hline
+		\texttt{quality\_score} $\leftrightarrow$ \texttt{score\_volume} & 0.75 & El volumen impacta directamente la calidad \\
+		\hline
+		\texttt{movement\_points} $\leftrightarrow$ \texttt{score\_mobility} & 0.82 & Coherencia entre métricas de movilidad \\
+		\hline
+		\texttt{time\_span\_days} $\leftrightarrow$ \texttt{score\_duration} & 1.00 & Relación perfecta por diseño del algoritmo \\
+		\hline
+		\texttt{score\_accuracy} $\leftrightarrow$ \texttt{avg\_accuracy\_meters} & -1.00 & Relación inversa lógica: menor error = mayor score \\
+		\hline
+	\end{tabular}
+	\caption{Correlaciones significativas identificadas}
+	\label{tab:correlaciones_clustering}
+\end{table}
+
+\paragraph{Implicación}: Las características seleccionadas capturan aspectos complementarios de la calidad de las trayectorias, validando el diseño del algoritmo de puntuación compuesta.
+
+\subsection{Distribuciones de características clave}
+
+\begin{enumerate}
+	\item \textbf{Quality Score}:
+	\begin{itemize}
+		\item Distribución sesgada hacia valores altos (concentración en 60-80 puntos).
+		\item Refleja el filtrado previo por calidad mínima ($\geq$35 puntos).
+	\end{itemize}
+	
+	\item \textbf{Movement Points}:
+	\begin{itemize}
+		\item Gran concentración en valores bajos ($<$100 puntos).
+		\item Cola larga hacia valores altos (hasta 500+ puntos).
+		\item Distribución típica de datos de movilidad con pocos usuarios muy activos.
+	\end{itemize}
+	
+	\item \textbf{Spatial Range}:
+	\begin{itemize}
+		\item Mayoría con rango espacial pequeño ($<$2.0 grados, $\sim$220 km).
+		\item Indica que la mayoría de usuarios se mueve dentro de áreas urbanas locales.
+	\end{itemize}
+	
+	\item \textbf{Active Days}:
+	\begin{itemize}
+		\item Distribución bimodal con picos en:
+		\begin{itemize}
+			\item 3-4 días (usuarios de fin de semana o muy ocasionales).
+			\item 8-9 días (usuarios con cobertura casi completa del período estudiado).
+		\end{itemize}
+	\end{itemize}
+\end{enumerate}
+
+\section{Resultados del Análisis de Longitudes de Vuelo}
+
+El análisis de distribución de longitudes de trayectoria reveló características extremas que evidencian patrones de movilidad muy heterogéneos.
+
+\subsection{Estadísticas descriptivas básicas}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|c|p{8cm}|}
+		\hline
+		\textbf{Métrica} & \textbf{Valor} & \textbf{Interpretación} \\
+		\hline
+		Total de individuos & 41,882 & Muestra analizada \\
+		\hline
+		Media & 3.48 km & Longitud promedio de trayectoria \\
+		\hline
+		Desviación estándar & 28.14 km & Variabilidad extremadamente alta \\
+		\hline
+		Mínimo & 0.0 km & Usuarios sin desplazamiento detectable \\
+		\hline
+		Q1 (25\%) & 0.0 km & Un cuarto de usuarios no se movió \\
+		\hline
+		Mediana (50\%) & 0.0 km & La mitad de usuarios tiene longitud cero \\
+		\hline
+		Q3 (75\%) & 0.63 km & Tercer cuartil apenas 630 metros \\
+		\hline
+		Máximo & 1,746.08 km & Outlier extremo (Tijuana a CDMX) \\
+		\hline
+	\end{tabular}
+	\caption{Estadísticas descriptivas de longitudes de vuelo}
+	\label{tab:estadisticas_longitudes}
+\end{table}
+
+\subsection{Métricas de forma de la distribución}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|c|p{8cm}|}
+		\hline
+		\textbf{Métrica} & \textbf{Valor} & \textbf{Interpretación} \\
+		\hline
+		Asimetría (Skewness) & 31.06 & Valor extremadamente alto ($>$3 se considera muy sesgado) \\
+		\hline
+		Curtosis (Kurtosis) & 1,341.15 & Valor excepcional ($>$3 indica colas pesadas) \\
+		\hline
+		Coeficiente de Variación (CV) & 8.08 & Variabilidad extrema relativa a la media \\
+		\hline
+	\end{tabular}
+	\caption{Métricas de forma de la distribución de longitudes}
+	\label{tab:metricas_forma}
+\end{table}
+
+\paragraph{Interpretación de las métricas de forma}:
+\begin{itemize}
+	\item \textbf{Skewness = 31.06}: Indica cola derecha extraordinariamente larga, con la mayoría de datos concentrados en valores bajos con outliers masivos.
+	\item \textbf{Kurtosis = 1,341.15}: Sugiere distribución leptocúrtica extrema: pico muy pronunciado en cero y colas muy pesadas.
+	\item \textbf{CV = 8.08}: Confirma heterogeneidad extrema en los patrones de movilidad; la desviación estándar es 8 veces mayor que la media.
+\end{itemize}
+
+\subsection{Distribución inflada en cero}
+
+El hallazgo más significativo es la distribución inflada en cero con tres segmentos claramente diferenciados:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|c|c|p{7cm}|}
+		\hline
+		\textbf{Segmento} & \textbf{Rango} & \textbf{Cantidad} & \textbf{Interpretación y posibles causas} \\
+		\hline
+		Usuarios Sedentarios & 0.0 km & 20,941 (50\%) & \begin{itemize}[leftmargin=*]
+			\item Usuarios que permanecieron en una única ubicación
+			\item Dispositivos estáticos (olvidados en casa/oficina)
+			\item Datos de referencia sin movimiento
+			\item Errores en estimación para trayectorias muy cortas
+		\end{itemize} \\
+		\hline
+		Usuarios Locales & 0.01 - 0.63 km & 10,470 (25\%) & \begin{itemize}[leftmargin=*]
+			\item Desplazamientos dentro del vecindario
+			\item Compras en tiendas cercanas
+			\item Paseos cortos recreativos
+			\item Movilidad intra-edificio
+		\end{itemize} \\
+		\hline
+		Usuarios Móviles & $>$0.63 km & 10,471 (25\%) & \begin{itemize}[leftmargin=*]
+			\item Commuters (casa-trabajo)
+			\item Usuarios de transporte público
+			\item Deportistas (corredores, ciclistas)
+			\item Viajeros ocasionales
+		\end{itemize} \\
+		\hline
+	\end{tabular}
+	\caption{Segmentación de usuarios por patrón de movilidad}
+	\label{tab:segmentacion_movilidad}
+\end{table}
+
+\subsection{Ajuste de distribuciones teóricas}
+
+Se intentó ajustar seis distribuciones probabilísticas comunes a los datos:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|c|c|c|p{6cm}|}
+		\hline
+		\textbf{Distribución} & \textbf{KS Statistic} & \textbf{p-value} & \textbf{AIC} & \textbf{Interpretación} \\
+		\hline
+		Rayleigh & 0.4550 & 0.0 & 368,039.06 & Ajuste muy pobre \\
+		\hline
+		Gamma & 0.7378 & 0.0 & -1,978,645.13 & Ajuste extremadamente pobre \\
+		\hline
+		Lognormal & - & - & - & No convergió \\
+		\hline
+		Normal & - & - & - & No aplicable (datos no negativos) \\
+		\hline
+		Exponencial & - & - & - & No ajustó \\
+		\hline
+		Weibull & - & - & - & No ajustó \\
+		\hline
+	\end{tabular}
+	\caption{Resultados del ajuste de distribuciones teóricas}
+	\label{tab:ajuste_distribuciones}
+\end{table}
+
+\paragraph{Conclusiones del ajuste}:
+\begin{itemize}
+	\item \textbf{Ninguna distribución estándar ajusta adecuadamente} los datos debido a:
+	\begin{itemize}
+		\item Inflación de ceros (50\% de observaciones en cero).
+		\item Heterogeneidad extrema entre segmentos.
+	\end{itemize}
+	\item \textbf{KS Statistics $>$0.1} indican mal ajuste (valores obtenidos $>>$0.4).
+	\item \textbf{p-values = 0.0} rechazan todas las hipótesis de ajuste.
+\end{itemize}
+
+\paragraph{Implicación para modelado}: Se requiere un \textbf{modelo de mezcla (mixture model)} que combine:
+\begin{itemize}
+	\item Componente discreta para la masa de probabilidad en cero (50\%).
+	\item Distribución continua (posiblemente lognormal o Weibull truncada) para valores $>$0.
+\end{itemize}
+
+\subsection{Análisis de outliers extremos}
+
+\paragraph{Outlier máximo}: 1,746.08 km (equivalente a la distancia entre Tijuana y Ciudad de México).
+
+\begin{itemize}
+	\item \textbf{Possibles causas}:
+	\begin{itemize}
+		\item Errores de GPS (saltos de ubicación por mala señal).
+		\item Inclusión de segmentos de viaje no peatonal a pesar del filtrado.
+		\item Múltiples días de actividad sumados incorrectamente.
+		\item Trayectorias de viajes largos (vacaciones, viajes de negocios).
+	\end{itemize}
+	
+	\item \textbf{Impacto en el análisis}:
+	\begin{itemize}
+		\item Distorsiona la media hacia arriba (3.48 km no es representativa del usuario típico).
+		\item La mediana (0.0 km) es más robusta pero oculta información de usuarios móviles.
+		\item Justifica el uso de transformación logarítmica para visualizaciones.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Recomendaciones para modelado futuro}:
+\begin{enumerate}
+	\item Limitar longitudes máximas (ej., usando percentil 99).
+	\item Analizar separadamente los tres segmentos identificados (sedentarios, locales, móviles).
+	\item Usar medianas en lugar de medias para reportar tendencias centrales.
+\end{enumerate}
+
+\section{Resultados del Análisis de Tiempos de Pausa}
+
+El análisis de pausas reveló patrones de comportamiento estacionario que complementan la caracterización de movimiento.
+
+\subsection{Cobertura y estadísticas generales}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{5cm}|c|p{7cm}|}
+		\hline
+		\textbf{Métrica} & \textbf{Valor} & \textbf{Interpretación} \\
+		\hline
+		Total de pausas detectadas & 1,134 & Eventos de pausa identificados \\
+		\hline
+		Usuarios con pausas detectables & 739 & Solo 1.8\% del total de usuarios \\
+		\hline
+		Sesiones únicas con pausas & 867 & Períodos de actividad analizados \\
+		\hline
+		Ratio pausas/sesión & 1.3 & Promedio de pausas por período activo \\
+		\hline
+	\end{tabular}
+	\caption{Cobertura del análisis de tiempos de pausa}
+	\label{tab:cobertura_pausas}
+\end{table}
+
+\paragraph{Observación crítica}: Solo el 1.8\% de usuarios (739 de 41,882) mostraron pausas detectables, sugiriendo:
+\begin{itemize}
+	\item Los umbrales de detección (distancia $<$50m, tiempo $>$1 segundo) son muy restrictivos.
+	\item La mayoría de trayectorias son demasiado cortas para contener pausas significativas.
+	\item Muchos usuarios tienen solo unos pocos puntos GPS, insuficientes para detectar pausas.
+\end{itemize}
+
+\subsection{Distribución de duraciones de pausa}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|c|p{8cm}|}
+		\hline
+		\textbf{Estadística} & \textbf{Valor} & \textbf{Interpretación} \\
+		\hline
+		Media & 32.0 minutos & \textit{Promedio} de duración de pausas \\
+		\hline
+		Mediana & 14.0 minutos & \textit{Valor típico} de duración de pausas \\
+		\hline
+		Desviación estándar & 40.1 minutos & Variabilidad extremadamente alta \\
+		\hline
+		Mínimo & 0.0167 min (1s) & Pausa más corta detectada \\
+		\hline
+		Máximo & 472.3 min (7.9h) & Pausa más larga detectada \\
+		\hline
+	\end{tabular}
+	\caption{Estadísticas de duración de pausas}
+	\label{tab:estadisticas_pausas}
+\end{table}
+
+\paragraph{Análisis de la dispersión}:
+\begin{itemize}
+	\item \textbf{Media (32 min) $>>$ Mediana (14 min)}: Distribución fuertemente sesgada a la derecha.
+	\item \textbf{Desviación estándar (40.1 min) $>$ Media (32 min)}: Variabilidad extremadamente alta.
+	\item \textbf{Interpretación}: La mayoría de pausas son cortas, pero algunas son muy largas (colas pesadas).
+\end{itemize}
+
+\subsection{Segmentación por duración}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{4cm}|c|c|c|}
+		\hline
+		\textbf{Categoría} & \textbf{Duración} & \textbf{Cantidad} & \textbf{Porcentaje} \\
+		\hline
+		Pausas muy cortas & $<$5 min & 367 & 32.4\% \\
+		\hline
+		Pausas cortas & 5-15 min & 215 & 19.0\% \\
+		\hline
+		Pausas medias & 15-30 min & 145 & 12.8\% \\
+		\hline
+		Pausas largas & $>$30 min & 407 & 35.9\% \\
+		\hline
+	\end{tabular}
+	\caption{Distribución de pausas por categoría de duración}
+	\label{tab:distribucion_pausas}
+\end{table}
+
+\paragraph{Patrón bimodal identificado}:
+\begin{enumerate}
+	\item \textbf{Pico 1}: Pausas muy cortas (32.4\%) - Componente de actividades cotidianas rápidas.
+	\item \textbf{Valle}: Pausas medias (12.8\%) - Zona de transición poco común.
+	\item \textbf{Pico 2}: Pausas largas (35.9\%) - Componente de estancias prolongadas.
+\end{enumerate}
+
+\paragraph{Interpretación comportamental}:
+\begin{itemize}
+	\item \textbf{Pausas muy cortas} ($<$5 min): Semáforos, esperas breves, paradas de tránsito.
+	\item \textbf{Pausas cortas} (5-15 min): Compras rápidas, encuentros sociales, café rápido.
+	\item \textbf{Pausas medias} (15-30 min): Comidas ligeras, reuniones breves, descansos.
+	\item \textbf{Pausas largas} ($>$30 min): Trabajo, hogar, comidas completas, actividades programadas.
+\end{itemize}
+
+\paragraph{Implicación fundamental}: Las personas tienden a hacer pausas muy cortas (pocos minutos) o muy largas (más de media hora), pero raramente pausas de duración intermedia. Esto refleja la naturaleza discreta de las actividades humanas: se está "en movimiento" o "detenido por tiempo extendido" para realizar actividades significativas.
+
+\endinput

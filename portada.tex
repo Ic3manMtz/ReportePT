@@ -130,7 +130,7 @@
 % ========================================
 % TABLAS Y ELEMENTOS FLOTANTES
 % ========================================
-%\usepackage{booktabs}               % Tablas con mejor formato
+\usepackage{booktabs}               % Tablas con mejor formato
 \usepackage{float}                  % Control avanzado de posición de flotantes
 \usepackage{caption}                % Personalización de leyendas
 %\usepackage{calc}                   % Cálculos precisos de dimensiones
@@ -249,8 +249,18 @@
 	\input{Secciones/desarrollo.tex}
 	
 	\chapter{Resultados}
+	\input{Secciones/resultados.tex}
 	
 	\chapter{Conclusiones y Trabajo futuro}
+	\input{Secciones/conclusiones.tex}
+	
+	\appendixtitleformat
+	\appendix
+	\chapter{Uso de Docker y Docker Compose}
+	\input{Secciones/Anexos/anexoA.tex}	
+	
+	\chapter{Scripts}
+	\input{Secciones/Anexos/anexoB.tex}
 	
 	
 	% Referencias
