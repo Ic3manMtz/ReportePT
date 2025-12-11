@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.1.16)  11 DEC 2025 05:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.1.16)  11 DEC 2025 05:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -429,13 +429,17 @@ Package hyperref Info: Link coloring OFF on input line 168.
 \@outlinefile=\write3
 \openout3 = `portada.out'.
 
-<img/logoUAM.png, id=319, 456.7464pt x 134.4222pt>
+<img/logoUAM.png, id=311, 456.7464pt x 134.4222pt>
+File: img/logoUAM.png Graphic file (type png)
+<use img/logoUAM.png>
+Package pdftex.def Info: img/logoUAM.png  used on input line 177.
+(pdftex.def)             Requested size: 274.04996pt x 80.65393pt.
 
 
 [0
 
-{C:/Users/molap/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-(portada.toc
+{C:/Users/molap/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./img/logoUA
+M.png>] (portada.toc
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 
@@ -585,8 +589,14 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [8]
-<img/histograma_device_horizontal_accuracy_Mobility_Data_Slim.png, id=591, 1003
+<img/histograma_device_horizontal_accuracy_Mobility_Data_Slim.png, id=582, 1003
 .1076pt x 569.2467pt>
+File: img/histograma_device_horizontal_accuracy_Mobility_Data_Slim.png Graphic 
+file (type png)
+<use img/histograma_device_horizontal_accuracy_Mobility_Data_Slim.png>
+Package pdftex.def Info: img/histograma_device_horizontal_accuracy_Mobility_Dat
+a_Slim.png  used on input line 130.
+(pdftex.def)             Requested size: 398.33858pt x 226.053pt.
 
 
 LaTeX Info: Redefining \. on input line 134.
@@ -599,8 +609,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [9]
-<img/histograma_identifier_Mobility_Data_Slim.png, id=598, 1147.8885pt x 645.61
+<img/histograma_identifier_Mobility_Data_Slim.png, id=589, 1147.8885pt x 645.61
 2pt>
+File: img/histograma_identifier_Mobility_Data_Slim.png Graphic file (type png)
+<use img/histograma_identifier_Mobility_Data_Slim.png>
+Package pdftex.def Info: img/histograma_identifier_Mobility_Data_Slim.png  used
+ on input line 142.
+(pdftex.def)             Requested size: 318.67207pt x 179.23334pt.
 
 
 LaTeX Info: Redefining \. on input line 148.
@@ -612,15 +627,40 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[10]
-<img/histograma_1-99_identifier_Mobility_Data_Slim.png, id=605, 1003.1076pt x 5
+[10 <./img/histograma_device_horizontal_accuracy_Mobility_Data_Slim.png> <./img
+/histograma_identifier_Mobility_Data_Slim.png>]
+<img/histograma_1-99_identifier_Mobility_Data_Slim.png, id=598, 1003.1076pt x 5
 69.7285pt>
-<img/histograma_100-1k_identifier_Mobility_Data_Slim.png, id=606, 1002.144pt x 
+File: img/histograma_1-99_identifier_Mobility_Data_Slim.png Graphic file (type 
+png)
+<use img/histograma_1-99_identifier_Mobility_Data_Slim.png>
+Package pdftex.def Info: img/histograma_1-99_identifier_Mobility_Data_Slim.png 
+ used on input line 152.
+(pdftex.def)             Requested size: 191.2008pt x 108.58858pt.
+<img/histograma_100-1k_identifier_Mobility_Data_Slim.png, id=599, 1002.144pt x 
 569.2467pt>
-<img/histograma_1k-10k_identifier_Mobility_Data_Slim.png, id=607, 1002.144pt x 
+File: img/histograma_100-1k_identifier_Mobility_Data_Slim.png Graphic file (typ
+e png)
+<use img/histograma_100-1k_identifier_Mobility_Data_Slim.png>
+Package pdftex.def Info: img/histograma_100-1k_identifier_Mobility_Data_Slim.pn
+g  used on input line 158.
+(pdftex.def)             Requested size: 191.2008pt x 108.60098pt.
+<img/histograma_1k-10k_identifier_Mobility_Data_Slim.png, id=600, 1002.144pt x 
 569.2467pt>
-<img/histograma_identifier_Mobility_Data_Slim_DeDuplicate.png, id=609, 1147.888
+File: img/histograma_1k-10k_identifier_Mobility_Data_Slim.png Graphic file (typ
+e png)
+<use img/histograma_1k-10k_identifier_Mobility_Data_Slim.png>
+Package pdftex.def Info: img/histograma_1k-10k_identifier_Mobility_Data_Slim.pn
+g  used on input line 167.
+(pdftex.def)             Requested size: 191.2008pt x 108.60098pt.
+<img/histograma_identifier_Mobility_Data_Slim_DeDuplicate.png, id=602, 1147.888
 5pt x 645.612pt>
+File: img/histograma_identifier_Mobility_Data_Slim_DeDuplicate.png Graphic file
+ (type png)
+<use img/histograma_identifier_Mobility_Data_Slim_DeDuplicate.png>
+Package pdftex.def Info: img/histograma_identifier_Mobility_Data_Slim_DeDuplica
+te.png  used on input line 185.
+(pdftex.def)             Requested size: 318.67207pt x 179.23334pt.
 
 
 LaTeX Info: Redefining \. on input line 189.
@@ -632,13 +672,33 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[11]
-<img/histograma_1-99_identifier_Mobility_Data_Slim_DeDuplicate.png, id=617, 100
+[11 <./img/histograma_1-99_identifier_Mobility_Data_Slim.png> <./img/histograma
+_100-1k_identifier_Mobility_Data_Slim.png> <./img/histograma_1k-10k_identifier_
+Mobility_Data_Slim.png>]
+<img/histograma_1-99_identifier_Mobility_Data_Slim_DeDuplicate.png, id=613, 100
 3.1076pt x 569.7285pt>
-<img/histograma_100-1k_identifier_Mobility_Data_Slim_DeDuplicate.png, id=618, 1
+File: img/histograma_1-99_identifier_Mobility_Data_Slim_DeDuplicate.png Graphic
+ file (type png)
+<use img/histograma_1-99_identifier_Mobility_Data_Slim_DeDuplicate.png>
+Package pdftex.def Info: img/histograma_1-99_identifier_Mobility_Data_Slim_DeDu
+plicate.png  used on input line 205.
+(pdftex.def)             Requested size: 191.2008pt x 108.58858pt.
+<img/histograma_100-1k_identifier_Mobility_Data_Slim_DeDuplicate.png, id=614, 1
 002.144pt x 569.2467pt>
-<img/histograma_1k-10k_identifier_Mobility_Data_Slim_DeDuplicate.png, id=619, 1
+File: img/histograma_100-1k_identifier_Mobility_Data_Slim_DeDuplicate.png Graph
+ic file (type png)
+<use img/histograma_100-1k_identifier_Mobility_Data_Slim_DeDuplicate.png>
+Package pdftex.def Info: img/histograma_100-1k_identifier_Mobility_Data_Slim_De
+Duplicate.png  used on input line 211.
+(pdftex.def)             Requested size: 191.2008pt x 108.60098pt.
+<img/histograma_1k-10k_identifier_Mobility_Data_Slim_DeDuplicate.png, id=615, 1
 002.144pt x 569.2467pt>
+File: img/histograma_1k-10k_identifier_Mobility_Data_Slim_DeDuplicate.png Graph
+ic file (type png)
+<use img/histograma_1k-10k_identifier_Mobility_Data_Slim_DeDuplicate.png>
+Package pdftex.def Info: img/histograma_1k-10k_identifier_Mobility_Data_Slim_De
+Duplicate.png  used on input line 220.
+(pdftex.def)             Requested size: 191.2008pt x 108.60098pt.
 
 
 LaTeX Info: Redefining \. on input line 228.
@@ -650,7 +710,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[12]
+[12 <./img/histograma_identifier_Mobility_Data_Slim_DeDuplicate.png>]
 
 LaTeX Info: Redefining \. on input line 271.
 LaTeX Info: Redefining \% on input line 271.
@@ -661,7 +721,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[13]
+[13 <./img/histograma_1-99_identifier_Mobility_Data_Slim_DeDuplicate.png> <./im
+g/histograma_100-1k_identifier_Mobility_Data_Slim_DeDuplicate.png> <./img/histo
+grama_1k-10k_identifier_Mobility_Data_Slim_DeDuplicate.png>]
 
 LaTeX Info: Redefining \. on input line 304.
 LaTeX Info: Redefining \% on input line 304.
@@ -2164,51 +2226,37 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-
-Package rerunfilecheck Warning: File `portada.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `portada.out':
-(rerunfilecheck)             Before: 90ECB807BAD9D5CE2B7BEDEFD1EC9783;18535
-(rerunfilecheck)             After:  F09216D7DFBC2E9151081C11EF7EF959;18017.
+Package rerunfilecheck Info: File `portada.out' has not changed.
+(rerunfilecheck)             Checksum: F09216D7DFBC2E9151081C11EF7EF959;18017.
  ) 
 Here is how much of TeX's memory you used:
- 18014 strings out of 473535
- 289832 string characters out of 5731770
- 1223204 words of memory out of 5000000
- 38756 multiletter control sequences out of 15000+600000
+ 18020 strings out of 473535
+ 290353 string characters out of 5731770
+ 1223429 words of memory out of 5000000
+ 38764 multiletter control sequences out of 15000+600000
  567986 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,15n,79p,1026b,2115s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{subsection.6.4.4} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.6.4.3} has been referenced but does not 
-exist, replaced by a fixed one
-
- <C:\Users\molap\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt10
-00.pk> <C:\Users\molap\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
-tcrm1095.pk><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><S:/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmbx12.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmbx8.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><S:/MiKTeX/font
-s/type1/public/amsfonts/cm/cmbxti10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmcsc10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><S:/MiKTeX/
-fonts/type1/public/amsfonts/cm/cmitt10.pfb><S:/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmmi10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><S:/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmmib10.pfb><S:/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmr10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><S:/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmr8.pfb><S:/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmr9.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><S:/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmsy8.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmti10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><S:/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmtt12.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmtt9.pfb>
-Output written on portada.pdf (124 pages, 1020862 bytes).
+ <C:\Users\molap\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt
+1000.pk> <C:\Users\molap\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
+0\tcrm1095.pk><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><S:/MiKTeX/f
+onts/type1/public/amsfonts/cm/cmbx12.pfb><S:/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmbx8.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><S:/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmbxti10.pfb><S:/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmcsc10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><S:/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmitt10.pfb><S:/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmmi10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><S:/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><S:/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmr10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><S:/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmr8.pfb><S:/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmr9.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><S:/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmsy8.pfb><S:/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmti10.pfb><S:/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><S:/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmtt12.pfb><S:/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmtt9.pfb>
+Output written on portada.pdf (124 pages, 3664217 bytes).
 PDF statistics:
  3654 PDF objects out of 4296 (max. 8388607)
- 2273 named destinations out of 2487 (max. 500000)
- 683 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2271 named destinations out of 2487 (max. 500000)
+ 667 words of extra memory for PDF output out of 10000 (max. 10000000)
 
